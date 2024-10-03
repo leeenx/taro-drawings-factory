@@ -1,6 +1,5 @@
 import { memo, useEffect, useState } from 'react';
 import Taro from '@tarojs/taro';
-import { View, Picker, PickerView, PickerViewColumn } from '@tarojs/components';
 import {
   AtCheckbox,
   AtImagePicker,
@@ -17,9 +16,13 @@ import {
 } from 'taro-ui';
 import { useMemoizedFn } from 'ahooks';
 import DocHeader from "../../../components/doc-header";
-import { rem, setPageTitle } from '../../../utils';
 
-import css from './index.css.ts';
+import { rem, setPageTitle } from '../../../utils';
+import css from './index.css';
+
+const { View, Picker, PickerView, PickerViewColumn } = css;
+
+console.log('-----', { View, Picker, PickerView, PickerViewColumn });
 
 const getYearsMonthsDays = () => {
   const date = new Date()
@@ -185,29 +188,29 @@ export default memo(() => {
   const { years, months, days, value, year, month, day, isWeapp, isAlipay } = state
 
   return (
-    <View className='page' style={css('page')}>
+    <View className='page'>
       {/* S Header */}
       <DocHeader title='数据录入' desc='12 个组件'></DocHeader>
       {/* E Header */}
 
       {/* S Body */}
-      <View className='doc-body' style={css('doc-body')}>
+      <View className='doc-body'>
         {/* Radio */}
-        <View className='panel' style={css('panel')}>
-          <View className='panel__title' style={css('panel__title')}>Radio 单选框</View>
-          <View className='panel__content no-padding' style={css('panel__content', 'no-padding')}>
-            <View className='radio-container' style={css('radio-container')}>
+        <View className='panel'>
+          <View className='panel__title'>Radio 单选框</View>
+          <View className='panel__content no-padding'>
+            <View className='radio-container'>
               <AtRadio options={state.radioOptions} value={state.radioValue} onClick={handleRadioChange} />
             </View>
           </View>
         </View>
 
         {/* Checkbox */}
-        <View className='panel' style={css('panel')}>
-          <View className='panel__title' style={css('panel__title')}>Checkbox 复选框</View>
-          <View className='panel__content no-padding' style={css('panel__content', 'no-padding')}>
-            <View className='example-item' style={css('example-item')}>
-              <View className='checkbox-container' style={css('checkbox-container')}>
+        <View className='panel'>
+          <View className='panel__title'>Checkbox 复选框</View>
+          <View className='panel__content no-padding'>
+            <View className='example-item'>
+              <View className='checkbox-container'>
                 <AtCheckbox
                   options={state.checkboxOption}
                   selectedList={state.checkedList}
@@ -219,10 +222,10 @@ export default memo(() => {
         </View>
 
         {/* Switch */}
-        <View className='panel' style={css('panel')}>
-          <View className='panel__title' style={css('panel__title')}>Switch 开关</View>
-          <View className='panel__content no-padding' style={css('panel__content', 'no-padding')}>
-            <View className='example-item' style={css('example-item')}>
+        <View className='panel'>
+          <View className='panel__title'>Switch 开关</View>
+          <View className='panel__content no-padding'>
+            <View className='example-item'>
               <AtForm>
                 <AtSwitch title='开启中' color='#EC585A' checked={state.switchValue} onChange={handleSwitchChange} />
                 <AtSwitch title='已关闭' color='#EC585A' border={false} />
@@ -232,10 +235,10 @@ export default memo(() => {
         </View>
 
         {/* Input */}
-        <View className='panel' style={css('panel')}>
-          <View className='panel__title' style={css('panel__title')}>Input 输入框</View>
-          <View className='panel__content no-padding' style={css('panel__content', 'no-padding')}>
-            <View className='component-item' style={css('component-item')}>
+        <View className='panel'>
+          <View className='panel__title'>Input 输入框</View>
+          <View className='panel__content no-padding'>
+            <View className='component-item'>
               <AtForm>
                 <AtInput name='inputValue1' title='标准五个字' type='text' placeholder='标准五个字' value={state.inputValue1} onChange={(value) => handleInput('inputValue1', value)} />
                 <AtInput name='inputValue2' title='标题实在特别长就换行' placeholder='其他列保持正常间距' value={state.inputValue2} onChange={(value) => handleInput('inputValue2', value)} />
@@ -246,10 +249,10 @@ export default memo(() => {
         </View>
 
         {/* Textarea */}
-        <View className='panel' style={css('panel')}>
-          <View className='panel__title' style={css('panel__title')}>Textarea 多行文本框</View>
-          <View className='panel__content' style={css('panel__content')}>
-            <View className='example-item' style={css('example-item')}>
+        <View className='panel'>
+          <View className='panel__title'>Textarea 多行文本框</View>
+          <View className='panel__content'>
+            <View className='example-item'>
               <AtTextarea
                 value={state.textareaValue}
                 onChange={(value) => handleTextareaChange('textareaValue', value)}
@@ -261,10 +264,10 @@ export default memo(() => {
         </View>
 
         {/* SearchBar */}
-        <View className='panel' style={css('panel')}>
-          <View className='panel__title' style={css('panel__title')}>SearchBar 搜索栏</View>
-          <View className='panel__content no-padding' style={css('panel__content', 'no-padding')}>
-            <View className='component-item' style={css('component-item')}>
+        <View className='panel'>
+          <View className='panel__title'>SearchBar 搜索栏</View>
+          <View className='panel__content no-padding'>
+            <View className='component-item'>
               <AtSearchBar
                 value={state.searchbarValue}
                 onChange={(value) => handleSearchBarChange('searchbarValue', value)}
@@ -275,12 +278,12 @@ export default memo(() => {
         </View>
 
         {/* InputNumber */}
-        <View className='panel' style={css('panel')}>
-          <View className='panel__title' style={css('panel__title')}>InputNumber 数字输入框</View>
-          <View className='panel__content' style={css('panel__content')}>
+        <View className='panel'>
+          <View className='panel__title'>InputNumber 数字输入框</View>
+          <View className='panel__content'>
             {/* 基本用法 */}
-            <View className='example-item' style={css('example-item')}>
-              <View className='example-item__desc' style={css('example-item__desc')}>min=0, max=10, step=1</View>
+            <View className='example-item'>
+              <View className='example-item__desc'>min=0, max=10, step=1</View>
               <AtInputNumber
                 min={0}
                 max={10}
@@ -291,8 +294,8 @@ export default memo(() => {
             </View>
 
             {/* 禁用 */}
-            <View className='example-item' style={css('example-item')}>
-              <View className='example-item__desc' style={css('example-item__desc')}>禁用</View>
+            <View className='example-item'>
+              <View className='example-item__desc'>禁用</View>
               <AtInputNumber
                 disabled
                 min={0}
@@ -304,8 +307,8 @@ export default memo(() => {
             </View>
 
             {/* 大尺寸 */}
-            <View className='example-item' style={css('example-item')}>
-              <View className='example-item__desc' style={css('example-item__desc')}>大尺寸</View>
+            <View className='example-item'>
+              <View className='example-item__desc'>大尺寸</View>
               <AtInputNumber
                 size='large'
                 min={0}
@@ -319,11 +322,11 @@ export default memo(() => {
         </View>
 
         {/* Range */}
-        <View className='panel' style={css('panel')}>
-          <View className='panel__title' style={css('panel__title')}>Range 范围选择器</View>
-          <View className='panel__content' style={css('panel__content')}>
-            <View className='example-item' style={css('example-item')}>
-              <View className='example-item__desc' style={css('example-item__desc')}>
+        <View className='panel'>
+          <View className='panel__title'>Range 范围选择器</View>
+          <View className='panel__content'>
+            <View className='example-item'>
+              <View className='example-item__desc'>
                 数值范围：{state.rangeValue[0]}~{state.rangeValue[1]}
               </View>
               <AtRange
@@ -335,31 +338,31 @@ export default memo(() => {
         </View>
 
         {/* Slider */}
-        <View className='panel' style={css('panel')}>
-          <View className='panel__title' style={css('panel__title')}>Slider 滑动条</View>
-          <View className='panel__content' style={css('panel__content')}>
-            <View className='example-item' style={css('example-item')}>
-              <View className='example-item__desc' style={css('example-item__desc')}>step=1</View>
+        <View className='panel'>
+          <View className='panel__title'>Slider 滑动条</View>
+          <View className='panel__content'>
+            <View className='example-item'>
+              <View className='example-item__desc'>step=1</View>
               <AtSlider step={1} value={50} activeColor='#EC585A'></AtSlider>
             </View>
           </View>
         </View>
 
         {/* Rate */}
-        <View className='panel' style={css('panel')}>
-          <View className='panel__title' style={css('panel__title')}>Rate 评分</View>
-          <View className='panel__content' style={css('panel__content')}>
-            <View className='example-item' style={css('example-item')}>
+        <View className='panel'>
+          <View className='panel__title'>Rate 评分</View>
+          <View className='panel__content'>
+            <View className='example-item'>
               <AtRate value={state.rateValue} onChange={(value) => handleRateChange('rateValue', value)} />
             </View>
           </View>
         </View>
 
         {/* ImagePicker */}
-        <View className='panel' style={css('panel')}>
-          <View className='panel__title' style={css('panel__title')}>ImagePicker 图片选择器</View>
-          <View className='panel__content no-padding' style={css('panel__content', 'no-padding')}>
-            <View className='example-item' style={css('example-item')}>
+        <View className='panel'>
+          <View className='panel__title'>ImagePicker 图片选择器</View>
+          <View className='panel__content no-padding'>
+            <View className='example-item'>
               <AtImagePicker
                 files={state.files}
                 onChange={(files) => handleImageChange('files', files)}
@@ -369,14 +372,14 @@ export default memo(() => {
         </View>
 
         {/* Picker */}
-        <View className='panel' style={css('panel')}>
-          <View className='panel__title' style={css('panel__title')}>Picker 选择器</View>
-          <View className='panel__content no-padding' style={css('panel__content', 'no-padding')}>
-            <View className='example-item' style={css('example-item')}>
+        <View className='panel'>
+          <View className='panel__title'>Picker 选择器</View>
+          <View className='panel__content no-padding'>
+            <View className='example-item'>
               <Picker mode='selector' range={state.selector} value={state.selectorValue} onChange={handlePickerChange}>
-                <View className='demo-list-item' style={css('demo-list-item')}>
-                  <View className='demo-list-item__label' style={css('demo-list-item__label')}>国家地区</View>
-                  <View className='demo-list-item__value' style={css('demo-list-item__value')}>{state.selector[state.selectorValue]}</View>
+                <View className='demo-list-item'>
+                  <View className='demo-list-item__label'>国家地区</View>
+                  <View className='demo-list-item__value'>{state.selector[state.selectorValue]}</View>
                 </View>
               </Picker>
             </View>
@@ -384,23 +387,23 @@ export default memo(() => {
         </View>
 
         {/* PickerView */}
-        <View className='panel' style={css('panel')}>
-          <View className='panel__title' style={css('panel__title')}>PickerView 滚动选择器</View>
-          <View className='panel__content' style={css('panel__content')}>
-            <View className='example-item' style={css('example-item')}>
-              <View className='example-item__desc' style={css('example-item__desc')}>嵌入页面的滑动选择器</View>
+        <View className='panel'>
+          <View className='panel__title'>PickerView 滚动选择器</View>
+          <View className='panel__content'>
+            <View className='example-item'>
+              <View className='example-item__desc'>嵌入页面的滑动选择器</View>
               {
                 isWeapp || isAlipay ? (
                   <View>
-                    <View className='title-date' style={css('title-date')}>{year}年{month}月{day}日</View>
+                    <View className='title-date'>{year}年{month}月{day}日</View>
                     <PickerView
                       indicatorStyle='height: 50px;'
                       className='picker'
-                      style={css('picker', {
+                      style={{
                         width: '100%',
                         height: rem(300),
                         textAlign: 'center'
-                      })}
+                      }}
                       value={value}
                       onChange={handlePickerViewChange}
                     >
@@ -415,7 +418,7 @@ export default memo(() => {
                       </PickerViewColumn>
                     </PickerView>
                   </View>
-                ) : <View className='title-date' style={css('title-date')}>暂时仅支持小程序</View>
+                ) : <View className='title-date'>暂时仅支持小程序</View>
               }
             </View>
           </View>

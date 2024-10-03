@@ -23,7 +23,7 @@ import { listMap } from '../../../utils';
 import css from './index.css';
 
 export default memo(() => {
-  const [state, setState] = useState({
+  const [state, updateState] = useState({
     isCurtainOpened: false,
     loadMoreStatus: 'more',
     stepsCurrent1: 0,
@@ -59,6 +59,10 @@ export default memo(() => {
       { name: '标签3', active: true },
       { name: '标签4', active: true }
     ],
+  });
+
+  const setState = useMemoizedFn((nextState) => {
+    updateState({ ...state, ...nextState });
   });
 
   const handleCurtainClick = useMemoizedFn((flag) => {
@@ -133,7 +137,7 @@ export default memo(() => {
             <View className='panel__title' style={css('panel__title')}>Article 文章</View>
             <View className='panel__content' style={css('panel__content')}>
               <View className='example-item' style={css('example-item')}>
-                <NavigatorBtn webPackage="/demo/" page='article'></NavigatorBtn>
+                <NavigatorBtn webPackage="/demo/" page='Article'></NavigatorBtn>
               </View>
             </View>
           </View>
@@ -267,7 +271,7 @@ export default memo(() => {
               {/* 实心标签 */}
               <View className='example-item' style={css('example-item')}>
                 {listMap(state.solidTagList, (item, index) => (
-                  <View className='subitem' style={css('submit')} key={index}>
+                  <View className='subitem' style={css('subitem')} key={index}>
                     <AtTag
                       type='primary'
                       name={item.name}

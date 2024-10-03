@@ -1,6 +1,7 @@
-import { rem, createCss } from "../../../utils";
+import { rem, createTaroComponentsBindCss } from "../../../utils";
 
 const afterStyle = {
+  content: '',
   position: "absolute",
   top: "auto",
   left: 0,
@@ -19,7 +20,7 @@ const labelStyle = {
   lineHeight: 1.5,
 };
 
-export default createCss({
+export default createTaroComponentsBindCss({
   'demo-list-item': {
     position: "relative",
     display: "flex",

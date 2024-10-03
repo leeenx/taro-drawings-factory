@@ -5,6 +5,7 @@ declare module '*.jpeg'
 declare module '*.gif'
 declare module '*.bmp'
 declare module '*.tiff'
+declare module '~*'
 
 declare function navigate(route: string, params?: any, config?: { headless?: boolean; replace?: boolean; }): Promise<void>;
 declare const currentPage: WechatMiniprogram.Page.Instance<WechatMiniprogram.IAnyObject, WechatMiniprogram.IAnyObject>;

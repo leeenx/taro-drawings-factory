@@ -9,6 +9,7 @@ import Panel from "./panel";
 import View from './view';
 import Index from './index/index';
 import Article from './article';
+import Indexes from './indexes';
 
 export default Index;
 export {
@@ -22,4 +23,5 @@ export {
   View,
   Index,
   Article,
+  Indexes,
 };

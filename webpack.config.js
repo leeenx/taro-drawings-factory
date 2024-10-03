@@ -174,6 +174,7 @@ plugins.push(
     watch: process.env.COMPRESS !== 'yes',
     test(name) {
       // dist/js & dist/css & dist/pages 不需要作转换
+      console.log('----- name', name);
       return !/(^js\/)|(^css\/)|(^pages\/)|(^h5-global\.\/)|(^mount-app\.\/)/.test(name);
     }
   })
@@ -203,6 +204,9 @@ module.exports = {
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.jsx', '.json', '.wasm'],
+    alias: {
+      '~': path.resolve(__dirname, './')
+    }
   },
   module: {
     rules: [
@@ -265,11 +269,11 @@ module.exports = {
         commonjs: '@tarojs/taro',
         commonjs2: '@tarojs/taro',
         root: 'Taro',
-        'taro-ui': {
-          commonjs: 'taro-ui',
-          commonjs2: 'taro-ui',
-          root: 'TaroUI'
-        }
+      },
+      'taro-ui': {
+        commonjs: 'taro-ui',
+        commonjs2: 'taro-ui',
+        root: 'TaroUI'
       }
     };
     // Taro-weapp 安装的依赖，需要安装

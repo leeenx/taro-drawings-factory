@@ -1,6 +1,9 @@
 import { rem, createCss } from "../../../utils";
 
 export default createCss({
+  test(color: string = 'red') {
+    return { color };
+  },
   'panel__content': {
     marginTop: rem(40),
   },

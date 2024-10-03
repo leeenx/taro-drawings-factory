@@ -1,0 +1,23 @@
+<!doctype html><html><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"><meta content="width=device-width,initial-scale=1,user-scalable=no" name="viewport"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-touch-fullscreen" content="yes"><meta name="format-detection" content="telephone=no,address=no"><meta name="apple-mobile-web-app-status-bar-style" content="white"><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><title>test-taro-project</title><script>!function(n){function f(){var e=n.document.documentElement,w=e.getBoundingClientRect().width,x=40*w/750;e.style.fontSize=x>=40?"40px":x<=20?"20px":x+"px"}n.addEventListener("resize",(function(){f()})),f()}(window);</script><script defer="defer" src="/js/305.314242eb.js"></script><script defer="defer" src="/js/pages/index/index.314242eb.js"></script><link href="/css/pages/index/index.314242eb194553a926eb.css" rel="stylesheet"></head><body><div id="app"></div>
+  <% var jsFiles = [] %>
+  <% for (var index in htmlWebpackPlugin.files.js) { jsFiles.push(htmlWebpackPlugin.files.js[index]) }%>
+  <% if (jsFiles.length) jsFiles.push(jsFiles.shift()) %>
+  <% for(var index = 0; index < jsFiles.length; ++index) {%>
+    <% if(index === 0 || index === jsFiles.length - 1) { %>
+      <script type="text/javascript" defer src="<%=jsFiles[index] %>"></script>
+    <% } else { %>
+      <script type="text/javascript" defer id="webPackageApp" name="webPackageApp$<%= htmlWebpackPlugin.options.name %>" src="<%=jsFiles[index] %>" mp-web-package-url="<%=jsFiles[index].replace(/.js$/, '.dsl.json') %>"></script>
+    <% } %>
+  <% } %>
+  <% if(htmlWebpackPlugin.options.isDev === "yes"){ %>
+  <script>
+    var ws = new WebSocket("ws://localhost:9900");
+    ws.onopen = function() {
+      console.log('websocket服务链接打开');
+    };
+    ws.onmessage = function(e) {
+      console.log('------收到更新：', e.data);
+      location.reload();
+    }
+  </script>
+  <% } %></body></html>

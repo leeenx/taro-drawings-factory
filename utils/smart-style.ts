@@ -16,7 +16,7 @@ const parentMapInfoQueue: {
   even: boolean;
 }[] = [];
 
-type InteralCallback = (item: any, index: number) => {};
+type InteralCallback = (item: any, index: number) => any;
 
 export const listMap = function(list: any[], iteralCallback: InteralCallback) {
   if (currentArrayLen) {
@@ -37,7 +37,22 @@ export const listMap = function(list: any[], iteralCallback: InteralCallback) {
     isEven = !isOdd;
     isFirst = index === 0;
     isLast = index === currentArrayLen - 1;
-    return iteralCallback(item, index);
+    const node = iteralCallback(item, index);
+    try {
+      Object.assign(node.props, {
+        $$smartStyleInfo$$: {
+          currentArrayLen,
+          currentIndex,
+          isOdd,
+          isEven,
+          isFirst,
+          isLast,
+        }
+      });
+    } catch (err) {
+      console.warn('smart-style-info 添加失败，部分样式可能失效');
+    }
+    return node;
   });
   if (parentMapInfoQueue.length) {
     const { length, index, first, last, odd, even } = parentMapInfoQueue.pop()!;
@@ -48,34 +63,44 @@ export const listMap = function(list: any[], iteralCallback: InteralCallback) {
     isOdd = odd;
     isEven = even;
   } else {
+    // 恢复到默认值
     currentIndex = -1;
     currentArrayLen = 0;
+    isFirst = false;
+    isLast = false;
+    isOdd = false;
+    isEven = false;
   }
   return result;
 }
 type PureStyle = Record<string, string | number>;
-type NthFunction = (index: number) => PureStyle | undefined;
-type Style = Record<string, string | number | PureStyle | NthFunction>;
+type FnStyle = (...args) => PureStyle | undefined;
+type Style = Record<string, string | number | PureStyle | FnStyle> | FnStyle;
 type PureStyleSet = Record<string, PureStyle>;
-type NthSet = Record<string, NthFunction>;
-type StyleSet = Record<string, Style>;
+type NthSet = Record<string, FnStyle>;
+export type StyleSet = Record<string, Style>;
 
 // 全局样式集合
 const globalStyleSet: PureStyleSet = {};
 
-// 全局样式里的 NthFunction
-const globalStyleNthSet: Record<string, NthFunction> = {};
+// 全局样式里的 FnStyle
+const globalStyleFnSet: Record<string, FnStyle> = {};
 
-const pickStyleSet = (sourceStyle: StyleSet, pureStyleSet: PureStyleSet, nthSet: NthSet) => {
+const pickStyleSet = (sourceStyle: StyleSet, pureStyleSet: PureStyleSet, fnStyleSet: NthSet) => {
   const categorize = (key: string, style: Style, pureStyle: PureStyle) => {
     Object.entries(style).forEach(([styleKey, styleValue]) => {
       if (typeof styleValue === 'function') {
         /**
-         * 表示函数类，一般都是以「:」/「::」开头
+         * 表示函数类
          * 这个条件作为第一个条件是因为函数类优先；
          * 针对伪类或伪元素是一个函数表达时有用。
          */
-        nthSet[`${key}${styleKey}`] = styleValue;
+        if (styleKey.startsWith('&:')) {
+          // 表示 :nth-child 伪类
+          fnStyleSet[`${key}${styleKey.replace('&', '')}`] = styleValue;
+        } else {
+          fnStyleSet[`${key}${styleKey}`] = styleValue;
+        }
       } else if (
         [
           ':first-child',
@@ -103,26 +128,31 @@ const pickStyleSet = (sourceStyle: StyleSet, pureStyleSet: PureStyleSet, nthSet:
     });
   };
   Object.entries(sourceStyle).forEach(([key, style]) => {
-    pureStyleSet[key] = (() => {
-      const pureStyle: PureStyle = {};
-      categorize(key, style, pureStyle);
-      return pureStyle;
-    })();
+    if(typeof style === 'function') {
+      fnStyleSet[key] = style;
+    } else {
+      pureStyleSet[key] = (() => {
+        const pureStyle: PureStyle = {};
+        categorize(key, style, pureStyle);
+        return pureStyle;
+      })();
+    }
   });
 };
 
+// 全局样式
 export const setGlobalStyle = (styleSet: StyleSet) => {
   const pureStyleSet: PureStyleSet = {};
   // 提取出纯样式与nth函数
-  pickStyleSet(styleSet, globalStyleSet, globalStyleNthSet);
+  pickStyleSet(styleSet, globalStyleSet, globalStyleFnSet);
   Object.assign(globalStyleSet, pureStyleSet);
 };
 
 // 样式生成函数
-export const createCss = (styleSet: StyleSet) => {
+export function createCss(styleSet: StyleSet) {
   const pureStyleSet: PureStyleSet = {};
-  const nthSet: Record<string, NthFunction> = {};
-  pickStyleSet(styleSet, pureStyleSet, nthSet);
+  const fnStyleSet: Record<string, FnStyle> = {};
+  pickStyleSet(styleSet, pureStyleSet, fnStyleSet);
   // 将 globalStyleSet 与 pureStyleSet 合并生成新的对象
   const mergeStyleSet: PureStyleSet = {};
   Object.entries(globalStyleSet).forEach(([key, value]) => {
@@ -132,49 +162,58 @@ export const createCss = (styleSet: StyleSet) => {
     if (mergeStyleSet[key]) Object.assign(mergeStyleSet[key], value);
     else mergeStyleSet[key] = Object.assign({}, value);
   });
-  // 将 globalStyleNthSet 与 nthSet 合并
-  const mergeNthSet: Record<string, NthFunction> = {};
-  Object.entries(globalStyleNthSet).forEach(([key, value]) => {
-    mergeNthSet[key] = value;
+  // 将 globalStyleFnSet 与 fnStyleSet 合并
+  const mergeFnStyleSet: Record<string, FnStyle> = {};
+  Object.entries(globalStyleFnSet).forEach(([key, value]) => {
+    mergeFnStyleSet[key] = value;
   });
-  Object.entries(nthSet).forEach(([key, value]) => {
-    if (globalStyleNthSet[key]) {
-      mergeNthSet[key] = (index: number) => Object.assign(globalStyleNthSet[key](index) || {}, value(index));
+  Object.entries(fnStyleSet).forEach(([key, value]) => {
+    if (globalStyleFnSet[key]) {
+      mergeFnStyleSet[key] = (index: number) => Object.assign(globalStyleFnSet[key](index) || {}, value(index));
     } else {
-      mergeNthSet[key] = value;
+      mergeFnStyleSet[key] = value;
     }
   });
   const css = (...args) => {
+    if (!args.length) return Object.assign({}, mergeStyleSet, mergeFnStyleSet);
     const keys = args as string[]
     if (keys.length > 1) {
       const styles: PureStyle[] = keys.map(item => css(item));
       return Object.assign({}, ...styles);
     }
     const key = keys[0];
-    if (typeof key === 'object') {
+    // 表示入参是一段样式，直接返回
+    if (!Array.isArray(key) && typeof key === 'object') {
       return key;
     }
-    const style = mergeStyleSet[key];
+    const style = (() => {
+      if (Array.isArray(key)) {
+        // 数组，表示当前是一个函数类调用
+        const [fn, ...args] = key;
+        return mergeFnStyleSet[fn]?.(...args);
+      }
+      return mergeFnStyleSet[key]?.() || mergeStyleSet[key];
+    })();
     if (currentIndex < 0) {
       // 普通的提取样式
       return style;
     }
-    const mergeStyle = Object.assign({}, style, mergeNthSet[`${key}:nth-child`]?.(currentIndex) || {});
+    const mergeStyle = Object.assign({}, style, mergeFnStyleSet[`${key}:nth-child`]?.(currentIndex) || {});
     const firstChild = `${key}:first-child`;
     const lastChild = `${key}:last-child`;
     const oddChild = `${key}:nth-child(odd)`;
     const evenChild = `${key}:nth-child(even)`;
+    if (isOdd && mergeStyle[oddChild]) {
+      Object.assign(mergeStyle, mergeStyleSet[oddChild]);
+    }
+    if (isEven && mergeStyle[evenChild]) {
+      Object.assign(mergeStyle, mergeStyleSet[evenChild]);
+    }
     if (isFirst && mergeStyleSet[firstChild]) {
       Object.assign(mergeStyle, mergeStyleSet[firstChild]);
     }
     if (isLast && mergeStyleSet[lastChild]) {
-      Object.assign(mergeStyle, mergeStyleSet[firstChild]);
-    }
-    if (isOdd && mergeStyle[oddChild]) {
-      Object.assign(mergeStyle, mergeStyleSet[oddChild]);
-    }
-    if (isOdd && mergeStyle[evenChild]) {
-      Object.assign(mergeStyle, mergeStyleSet[evenChild]);
+      Object.assign(mergeStyle, mergeStyleSet[lastChild]);
     }
     // 调用 nth 函数
     return mergeStyle;

@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/leeenx/taro-drawings-factory#readme",
   "devDependencies": {
+    "@babel/core": "^7.25.7",
     "@babel/parser": "^7.22.16",
     "@babel/plugin-transform-runtime": "^7.22.15",
     "@babel/preset-env": "^7.22.20",
@@ -36,15 +37,15 @@
     "core-js": "^3.32.2",
     "cross-env": "^7.0.3",
     "html-webpack-plugin": "^5.5.3",
-    "kbs-dsl-parser": "^1.1.7",
+    "kbs-dsl-parser": "^1.1.8",
     "terser-webpack-plugin": "^5.3.9",
+    "web-package-taro-h5": "^0.0.5",
     "webpack": "^5.88.2",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^4.15.1"
   },
   "dependencies": {
     "ahooks": "^3.7.8",
-    "lodash": "^4.17.21",
-    "web-package-taro-h5": "^0.0.4"
+    "lodash": "^4.17.21"
   }
 }

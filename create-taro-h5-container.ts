@@ -15,7 +15,7 @@ const packageJsonPath = path.resolve(__dirname, 'package.json');
 // 读取 package.json 文件并将内容解析为 JSON 对象
 const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'));
 
-const webPackageTaroH5Version = packageJson?.dependencies?.["web-package-taro-h5"];
+const webPackageTaroH5Version = packageJson?.devDependencies?.["web-package-taro-h5"];
 
 // 复制目录
 function copyDir(src, dest) {
@@ -74,7 +74,7 @@ try {
   fs.accessSync(npmWebPackageTaroH5Dir);
 } catch (err) {
   console.error(err);
-  throw new Error("缺少关键依赖：「web-package-taro-h5」，请安装");
+  throw new Error("缺少关键依赖：「web-package-taro-h5」，请安装在【devDependencies】下");
 }
 if (!webPackageTaroH5Version) {
   // 报错

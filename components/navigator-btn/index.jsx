@@ -1,13 +1,14 @@
 import Taro from '@tarojs/taro'
 import { Component } from 'react'
-import PropTypes from 'prop-types'
 import { View } from '@tarojs/components'
 import css from './index.css'
 
 export default class NavigatorBtn extends Component {
   handleGoto (webPackage, page) {
     if (webPackage && page) navigate(webPackage, { page });
-    Taro.showToast({ icon: 'error', title: '缺少参数: webPackage 或 page' });
+    else {
+      Taro.showToast({ icon: 'error', title: '缺少参数: webPackage 或 page' });
+    }
   }
 
   render () {
@@ -29,9 +30,4 @@ export default class NavigatorBtn extends Component {
 NavigatorBtn.defaultProps = {
   webPackage: '',
   page: '',
-}
-
-NavigatorBtn.propTypes = {
-  webPackage: PropTypes.string,
-  page: PropTypes.string,
 }
