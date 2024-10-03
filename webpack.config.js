@@ -4,6 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const TerserPlugin = require("terser-webpack-plugin");
 const taroH5Container = require('./create-taro-h5-container.ts');
+const webpack = require('webpack');
 
 // 保留函数名
 const ignoreFNames = [
@@ -117,12 +118,22 @@ const isDev = process.env.DEV === 'yes';
 const PROTOCOL = isDev ? 'http:' : 'https:';
 const HOST = isDev ? '127.0.0.1' : 'www.leeenx.cn';
 const PORT = isDev ? 9000 : undefined;
-const PATH = 'dist';
+const PATH = process.env.BASE;
+
+const publicPath = PORT ? `${PROTOCOL}//${HOST}:${PORT}/` : `${PROTOCOL}//${HOST}/${PATH}/`
+
+taroH5Container.create(publicPath);
 
 const KbsDslParserPlugin = require('kbs-dsl-parser');
 
+let base = process.env.BASE || '';
+if (base) base = `/${base}`;
+
 // 默认插件列表，不包含 mpa
 const plugins = [
+  new webpack.DefinePlugin({
+    'process.env.BASE': JSON.stringify(base),
+  }),
   new CleanWebpackPlugin(),
   new HtmlWebpackPlugin({
     template: taroH5Container.htmlTemplate,
@@ -192,7 +203,7 @@ module.exports = {
       arrowFunction: false,
       const: false
     },
-    publicPath: PORT ? `${PROTOCOL}//${HOST}:${PORT}/` : `${PROTOCOL}//${HOST}/${PATH}/`
+    publicPath
   },
   optimization: {
     minimize: process.env.COMPRESS === 'yes',

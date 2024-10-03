@@ -5,7 +5,7 @@ import css from './index.css'
 
 export default class NavigatorBtn extends Component {
   handleGoto (webPackage, page) {
-    if (webPackage && page) navigate(webPackage, { page });
+    if (webPackage && page) navigate(process.env.BASE + webPackage, { page });
     else {
       Taro.showToast({ icon: 'error', title: '缺少参数: webPackage 或 page' });
     }

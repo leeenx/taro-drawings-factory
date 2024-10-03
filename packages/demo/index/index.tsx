@@ -57,7 +57,7 @@ export default memo(() => {
 
   const gotoPanel = useMemoizedFn(e => {
     const { id } = e.currentTarget.dataset;
-    navigate('/demo/', { page: id });
+    navigate(process.env.BASE + '/demo/', { page: id });
   });
 
   const { list } = state;
