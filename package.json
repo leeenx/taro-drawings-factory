@@ -8,7 +8,7 @@
     "start:prod": "cross-env COMPRESS=yes DEV=yes webpack serve",
     "build": "cross-env COMPRESS=yes DEV=no webpack",
     "build:dev": "cross-env COMPRESS=no DEV=yes webpack",
-    "zip": "cross-env COMPRESS=yes DEV=no webpack && zip -r dist.zip ./dist/"
+    "zip": "cross-env COMPRESS=yes DEV=no webpack && mv ./dist ./taro && zip -r taro.zip ./taro/ && rm -r ./taro"
   },
   "repository": {
     "type": "git",
