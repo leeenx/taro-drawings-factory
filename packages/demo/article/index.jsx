@@ -1,6 +1,6 @@
 import React, { memo, useEffect } from 'react';
 import { View, Image } from '@tarojs/components';
-import { setPageTitle } from '../../../utils';
+import { setPageTitle } from '~/utils';
 import css from './index.css';
 
 export default memo(() => {

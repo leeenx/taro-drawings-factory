@@ -15,8 +15,8 @@ import {
   AtToast,
 } from 'taro-ui';
 import { useMemoizedFn } from 'ahooks';
-import DocHeader from "../../../components/doc-header";
-import { setPageTitle, listMap } from '../../../utils';
+import DocHeader from "~/components/doc-header";
+import { setPageTitle, listMap } from '~/utils';
 
 import css from './index.css';
 

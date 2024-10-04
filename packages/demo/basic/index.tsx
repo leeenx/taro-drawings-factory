@@ -1,9 +1,9 @@
 import React, {memo, useEffect} from "react";
 import { View, Image } from '@tarojs/components';
-import { setPageTitle } from "../../../utils";
+import { setPageTitle } from "~/utils";
 import { AtButton } from 'taro-ui'
-import DocHeader from "../../../components/doc-header";
-import { listMap, rem } from "../../../utils";
+import DocHeader from "~/components/doc-header";
+import { listMap, rem } from "~/utils";
 
 import css from './index.css';
 

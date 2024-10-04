@@ -1,4 +1,4 @@
-import { rem, createTaroComponentsBindCss } from "../../../utils";
+import { rem, createTaroComponentsBindCss } from "~/utils";
 
 const taroComponents = createTaroComponentsBindCss({
   'at-row': {

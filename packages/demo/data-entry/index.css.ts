@@ -1,4 +1,4 @@
-import { rem, createTaroComponentsBindCss } from "../../../utils";
+import { rem, createTaroComponentsBindCss } from "~/utils";
 
 const afterStyle = {
   content: '',

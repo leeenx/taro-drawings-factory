@@ -14,12 +14,12 @@ import {
   AtTag,
   AtTimeline,
 } from 'taro-ui';
-import DocsHeader from '../../../components/doc-header';
-import NavigatorBtn from '../../../components/navigator-btn';
+import DocsHeader from '~/components/doc-header';
+import NavigatorBtn from '~/components/navigator-btn';
 
-import curtainPng from '../../../assets/images/curtain.png';
+import curtainPng from '~/assets/images/curtain.png';
 
-import { listMap } from '../../../utils';
+import { listMap } from '~/utils';
 import css from './index.css';
 
 export default memo(() => {

@@ -1,9 +1,9 @@
 import { useShareAppMessage } from '@tarojs/taro';
-import React, { memo, useState } from "react";
+import { memo, useState } from "react";
 import { View, Image } from '@tarojs/components';
 import { useMemoizedFn } from "ahooks";
 
-import LOGO_IMAGE from '../../../assets/images/logo_taro.png';
+import LOGO_IMAGE from '~/assets/images/logo_taro.png';
 
 import css from './index.css';
 

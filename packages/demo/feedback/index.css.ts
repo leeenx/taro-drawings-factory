@@ -1,4 +1,4 @@
-import { rem, createCss } from "../../../utils";
+import { rem, createCss } from "~/utils";
 
 export default createCss({
   'indicator-panel': {

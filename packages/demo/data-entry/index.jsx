@@ -15,9 +15,9 @@ import {
   AtTextarea,
 } from 'taro-ui';
 import { useMemoizedFn } from 'ahooks';
-import DocHeader from "../../../components/doc-header";
+import DocHeader from "~/components/doc-header";
 
-import { rem, setPageTitle } from '../../../utils';
+import { rem, setPageTitle } from '~/utils';
 import css from './index.css';
 
 const { View, Picker, PickerView, PickerViewColumn } = css;

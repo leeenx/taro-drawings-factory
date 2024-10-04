@@ -1,7 +1,7 @@
 import { memo, useEffect } from 'react';
 import { AtIndexes } from 'taro-ui';
 import mockData from './mock-data';
-import { setPageTitle } from '../../../utils';
+import { setPageTitle } from '~/utils';
 import components from './index.css';
 
 const { View } = components;

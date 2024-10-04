@@ -2,7 +2,7 @@ import { memo, useEffect, useState } from 'react';
 import { AtCalendar } from 'taro-ui';
 import DocHeader from "~/components/doc-header";
 import { useMemoizedFn } from 'ahooks';
-import { setPageTitle } from '../../../utils';
+import { setPageTitle } from '~/utils';
 
 import components from './index.css';
 

@@ -1,4 +1,4 @@
-import { rem } from "../../../utils"
+import { rem } from "~/utils"
 const css: Record<string, any> = {
   page: {
     position: 'relative',

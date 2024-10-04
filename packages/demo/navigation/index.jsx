@@ -8,9 +8,9 @@ import {
   AtPagination,
   AtDrawer,
 } from 'taro-ui';
-import DocHeader from "../../../components/doc-header";
-import NavigatorBtn from '../../../components/navigator-btn';
-import { setPageTitle, rem } from '../../../utils';
+import DocHeader from "~/components/doc-header";
+import NavigatorBtn from '~/components/navigator-btn';
+import { setPageTitle, rem } from '~/utils';
 import { useMemoizedFn } from 'ahooks';
 import components from './index.css';
 
