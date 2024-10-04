@@ -16,12 +16,20 @@ export default function <T>(css: Css, sourceGlobalComponents: T) {
 
   // 生成有伪类的组件
   const createComponentWithPseudo = (SourceComponent: JSXElementConstructor<any>) => (props: any) => {
-    const { className, children, style: rawStyle = {}, $$smartStyleInfo$$, ...others } = props;
+    const {
+      className,
+      children,
+      style: rawStyle = {},
+      nthChild,
+      $$nthChildInfo$$,
+      ...others
+    } = props;
     const cssNames = className?.split(/\s+/);
     const style = (() => {
       if (!className) return rawStyle;
-      if ($$smartStyleInfo$$) {
-        const { isFirst, isLast, isOdd, isEven, currentIndex } = $$smartStyleInfo$$;
+      const nthChildInfo = nthChild || $$nthChildInfo$$;
+      if (nthChildInfo) {
+        const { isFirst, isLast, isOdd, isEven, currentIndex } = nthChildInfo;
         // 表示在迭代循环中，需要按需添加伪类
         const cssNameList: any[] = [];
         cssNames.forEach((cssName) => {
@@ -77,13 +85,14 @@ export default function <T>(css: Css, sourceGlobalComponents: T) {
     return createElement(SourceComponent, {
       className,
       style,
+      nthChild,
       ...others
     }, [renderBefore(), children, renderAfter()]);
   };
 
   // 生成没有伪类的组件
   const createComponentWithoutPseudo = (SourceComponent: JSXElementConstructor<any>) => (props: any) => {
-    const { $$smartStyleInfo$$, className, style: rawStyle = {}, ...others } = props;
+    const { $$nthChildInfo$$, className, style: rawStyle = {}, ...others } = props;
     const cssNames = className?.split(/\s+/);
     const style = className ? css(...cssNames, rawStyle) : rawStyle;
     // 微信小程序中，SourceComponent 是字符串，所以需要用 createElement 来实现
@@ -103,6 +112,6 @@ export default function <T>(css: Css, sourceGlobalComponents: T) {
       globalComponents[key] = createComponentWithoutPseudo(SourceComponent);
     }
   });
-  
+
   return globalComponents;
 };

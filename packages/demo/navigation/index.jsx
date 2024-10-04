@@ -10,7 +10,7 @@ import {
 } from 'taro-ui';
 import DocHeader from "../../../components/doc-header";
 import NavigatorBtn from '../../../components/navigator-btn';
-import { setPageTitle } from '../../../utils';
+import { setPageTitle, rem } from '../../../utils';
 import { useMemoizedFn } from 'ahooks';
 import components from './index.css';
 
@@ -178,12 +178,12 @@ export default memo(() => {
             <View className='panel__title'>Pagination 分页器</View>
             <View className='panel__content no-padding'>
               <View className='example-item'>
-                <View className='example-item__desc'>基础</View>
+                <View className='example-item__desc' style={{ padding: `0 ${rem(60)}` }}>基础</View>
                 <AtPagination total={50} pageSize={10} current={1}></AtPagination>
               </View>
 
               <View className='example-item'>
-                <View className='example-item__desc'>图标</View>
+                <View className='example-item__desc' style={{ padding: `0 ${rem(60)}` }}>图标</View>
                 <AtPagination icon total={50} pageSize={10} current={1}></AtPagination>
               </View>
             </View>
@@ -206,7 +206,7 @@ export default memo(() => {
             <View className='panel__title'>Indexes 索引选择器</View>
             <View className='panel__content'>
               <View className='example-item'>
-                <NavigatorBtn webPackage='/demo/' page='indexes'></NavigatorBtn>
+                <NavigatorBtn webPackage='/demo/' page='Indexes'></NavigatorBtn>
               </View>
             </View>
           </View>

@@ -185,7 +185,6 @@ plugins.push(
     watch: process.env.COMPRESS !== 'yes',
     test(name) {
       // dist/js & dist/css & dist/pages 不需要作转换
-      console.log('----- name', name);
       return !/(^js\/)|(^css\/)|(^pages\/)|(^h5-global\.\/)|(^mount-app\.\/)/.test(name);
     }
   })

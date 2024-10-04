@@ -8,7 +8,7 @@
     "start:prod": "cross-env COMPRESS=yes DEV=yes BASE=taro webpack serve",
     "build": "cross-env COMPRESS=yes DEV=no BASE=taro webpack",
     "build:dev": "cross-env COMPRESS=no DEV=yeswebpack",
-    "zip": "cross-env COMPRESS=yes DEV=no BASE=taro webpack && mv ./dist ./taro && zip -r taro.zip ./taro/ && rm -r ./taro"
+    "zip": "cross-env COMPRESS=yes DEV=no BASE=taro webpack && rm ./taro.zip && mv ./dist ./taro && zip -r taro.zip ./taro/ && rm -r ./taro"
   },
   "repository": {
     "type": "git",
@@ -37,7 +37,7 @@
     "core-js": "^3.32.2",
     "cross-env": "^7.0.3",
     "html-webpack-plugin": "^5.5.3",
-    "kbs-dsl-parser": "^1.1.8",
+    "kbs-dsl-parser": "^1.1.9",
     "terser-webpack-plugin": "^5.3.9",
     "web-package-taro-h5": "^0.0.5",
     "webpack": "^5.88.2",

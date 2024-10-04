@@ -40,7 +40,7 @@ export const listMap = function(list: any[], iteralCallback: InteralCallback) {
     const node = iteralCallback(item, index);
     try {
       Object.assign(node.props, {
-        $$smartStyleInfo$$: {
+        $$nthChildInfo$$: {
           currentArrayLen,
           currentIndex,
           isOdd,
