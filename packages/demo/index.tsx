@@ -1,4 +1,5 @@
 import '../../utils/global-css';
+import Taro from '@tarojs/taro';
 import Advanced from "./advanced";
 import Basic from "./basic";
 import DataEntry from "./data-entry";
@@ -25,3 +26,15 @@ export {
   Article,
   Indexes,
 };
+
+const currentEnv: string = Taro.getEnv();
+const targetCacheCount = 3; // 目标数量
+// 缓存扩容检查
+if (currentEnv === 'WEAPP') {
+  getMemoCacheCount(nameSpace).then(cacheCount => {
+    // 扩容到 targetCacheCount
+    if (cacheCount < targetCacheCount) {
+        increaseMemoCache(nameSpace, targetCacheCount - cacheCount);
+    }
+  });
+}

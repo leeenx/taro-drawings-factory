@@ -10,10 +10,10 @@ import {
 import { useMemoizedFn } from 'ahooks';
 import DocHeader from "~/components/doc-header";
 
-import { setPageTitle, listMap } from '~/utils';
-import components from './index.css';
+import { setPageTitle } from '~/utils';
+import taroComponents from './index.css';
 
-const { View } = components;
+const { View } = taroComponents;
 
 export default memo(() => {
   const [state, setState] = useState({
@@ -86,24 +86,19 @@ export default memo(() => {
             <View className='example-item flex-page'>
               <View className='example-item__desc'>基本案例</View>
               <View className='at-row'>
-                {
-                  listMap(
-                    ['A', 'B' ,'C'],
-                    (item) => <View className='at-col' key={item}>{item}</View>
-                  )
-                }
+                <View className='at-col'>A</View>
+                <View className='at-col'>B</View>
+                <View className='at-col'>C</View>
               </View>
             </View>
 
             <View className='example-item flex-page'>
               <View className='example-item__desc'>定义长度</View>
               <View className='at-row'>
-                {
-                  listMap(
-                    [[3, 'A'], [6, 'B'], [2, 'C'], [1, 'D']],
-                    (item, index) => <View className={`at-col at-col-${item[0]}`} key={index}>{item[1]}</View>
-                  )
-                }
+                <View className={`at-col at-col-3`}>A</View>
+                <View className={`at-col at-col-6`}>B</View>
+                <View className={`at-col at-col-2`}>C</View>
+                <View className={`at-col at-col-1`}>D</View>
               </View>
             </View>
           </View>

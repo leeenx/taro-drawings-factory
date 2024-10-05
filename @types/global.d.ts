@@ -7,6 +7,19 @@ declare module '*.bmp'
 declare module '*.tiff'
 declare module '~*'
 
+interface StackItem {
+  registeredMembers: Record<string, any>;
+  moduleExports: any;
+}
+
+interface ResolvedModuleItem {
+  addStackItem: (stack: StackItem[]) => void;
+  stack: StackItem[];
+  stackDepth: number;
+  maxDepth: number;
+  preResolver: Function;
+}
+
 declare function navigate(route: string, params?: any, config?: { headless?: boolean; replace?: boolean; }): Promise<void>;
 declare const currentPage: WechatMiniprogram.Page.Instance<WechatMiniprogram.IAnyObject, WechatMiniprogram.IAnyObject>;
 declare function getCurrentPage(): WechatMiniprogram.Page.Instance<WechatMiniprogram.IAnyObject, WechatMiniprogram.IAnyObject>;
@@ -16,6 +29,9 @@ declare function getCurrentParams(): Record<string, string | undefined>;
 declare function getCurrentParam(key: string): string | undefined;
 declare function getDslUrl(route: string): string;
 declare function createWxMpRoute(route: string, params: any, headless: boolean): string;
+declare function getMemoCacheCount(nameSpace: string): Promise<number>;
+declare function getMemoCache(nameSpace: string): ResolvedModuleItem;
+declare function increaseMemoCache(nameSpace: string, increaseCount:number): void;
 
 // 扩展 JSX
 declare namespace JSX {
@@ -54,5 +70,5 @@ declare namespace JSX {
   }
 }
 
-declare const nameSpace: number;
+declare const nameSpace: string;
 declare const runingEnv: 'wx_mp' | 'web';

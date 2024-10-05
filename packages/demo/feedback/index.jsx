@@ -1,6 +1,5 @@
 import Taro from '@tarojs/taro';
 import React, { memo, useEffect, useState } from 'react';
-import { View, Text, Button } from '@tarojs/components'
 import {
   AtActionSheet,
   AtActionSheetItem,
@@ -16,9 +15,10 @@ import {
 } from 'taro-ui';
 import { useMemoizedFn } from 'ahooks';
 import DocHeader from "~/components/doc-header";
-import { setPageTitle, listMap } from '~/utils';
+import { setPageTitle } from '~/utils';
 
-import css from './index.css';
+import taroComponents from './index.css';
+const { View, Text, Button } = taroComponents;
 
 const OPTIONS = [
   {
@@ -126,215 +126,211 @@ export default memo(() => {
   });
 
   return (
-    <View className='page' style={css('page')}>
+    <View className='page'>
       {/* S Header */}
       <DocHeader title='操作反馈' desc='7 个组件'></DocHeader>
       {/* E Header */}
 
       {/* S Body */}
-      <View className='doc-body' style={css('doc-body')}>
+      <View className='doc-body'>
         {/* ActionSheet */}
-        <View className='panel' style={css('panel')}>
-          <View className='panel__title' style={css('panel__title')}>ActionSheet 动作面板</View>
-          <View className='panel__content' style={css('panel__content')}>
+        <View className='panel'>
+          <View className='panel__title'>ActionSheet 动作面板</View>
+          <View className='panel__content'>
             {/* 无 Title */}
-            <View className='example-item' style={css('example-item')}>
-              <View className='demo-btn' style={css('demo-btn')} onClick={() => handleActionSheetClick(1)}>无标题 ActionSheet</View>
+            <View className='example-item'>
+              <View className='demo-btn' onClick={() => handleActionSheetClick(1)}>无标题 ActionSheet</View>
             </View>
 
             {/* 含标题 */}
-            <View className='example-item' style={css('example-item')}>
-              <View className='demo-btn' style={css('demo-btn')} onClick={() => handleActionSheetClick(2)}>含标题 ActionSheet</View>
+            <View className='example-item'>
+              <View className='demo-btn' onClick={() => handleActionSheetClick(2)}>含标题 ActionSheet</View>
             </View>
 
             {/* 自定义选项 */}
-            <View className='example-item' style={css('example-item')}>
-              <View className='demo-btn' style={css('demo-btn')} onClick={() => handleActionSheetClick(3)}>自定义选项 ActionSheet</View>
+            <View className='example-item'>
+              <View className='demo-btn' onClick={() => handleActionSheetClick(3)}>自定义选项 ActionSheet</View>
             </View>
           </View>
         </View>
 
         {/* Message */}
-        <View className='panel' style={css('panel')}>
-          <View className='panel__title' style={css('panel__title')}>Message 消息通知</View>
-          <View className='panel__content' style={css('panel__content')}>
-            <View className='example-item' style={css('example-item')}>
-              {
-                listMap(
-                  [
-                    <View className='demo-btn' style={css('demo-btn')} onClick={() => handleMessageClick('')}>普通提示</View>,
-                    <View className='demo-btn' style={css('demo-btn')} onClick={() => handleMessageClick('success')}>成功提示</View>,
-                    <View className='demo-btn' style={css('demo-btn')} onClick={() => handleMessageClick('error')}>错误提示</View>,
-                  ],
-                  (item, index) => <View className='subitem' style={css('subitem')} key={index}>{item}</View>
-                )
-              }
+        <View className='panel'>
+          <View className='panel__title'>Message 消息通知</View>
+          <View className='panel__content'>
+            <View className='example-item'>
+              <View className='subitem'>
+                <View className='demo-btn' onClick={() => handleMessageClick('')}>普通提示</View>
+              </View>
+              <View className='subitem'>
+                <View className='demo-btn' onClick={() => handleMessageClick('success')}>成功提示</View>
+              </View>
+              <View className='subitem'>
+                <View className='demo-btn' onClick={() => handleMessageClick('error')}>错误提示</View>
+              </View>
             </View>
-            <View className='example-item' style={css('example-item')}>
-              {
-                listMap(
-                  [
-                    <View className='demo-btn' style={css('demo-btn')} onClick={() => handleMessageClick('warning')}>警告提示</View>,
-                    <View className='demo-btn' style={css('demo-btn')} onClick={() => handleMessageClick('info')}>提示消息</View>
-                  ],
-                  (item, index) => <View className='subitem' style={css('subitem')} key={index}>{item}</View>
-                )
-              }
+            <View className='example-item'>
+              <View className='subitem'>
+                <View className='demo-btn' onClick={() => handleMessageClick('warning')}>警告提示</View>
+              </View>
+              <View className='subitem'>
+                <View className='demo-btn' onClick={() => handleMessageClick('info')}>提示消息</View>
+              </View>
             </View>
           </View>
         </View>
 
         {/* Modal */}
-        <View className='panel' style={css('panel')}>
-          <View className='panel__title' style={css('panel__title')}>Modal 模态框</View>
-          <View className='panel__content' style={css('panel__content')}>
+        <View className='panel'>
+          <View className='panel__title'>Modal 模态框</View>
+          <View className='panel__content'>
             {/* 基础模态框 */}
-            <View className='example-item' style={css('example-item')}>
-              <View className='demo-btn' style={css('demo-btn')} onClick={() => handleModalClick(1)}>打开基础模态框</View>
+            <View className='example-item'>
+              <View className='demo-btn' onClick={() => handleModalClick(1)}>打开基础模态框</View>
             </View>
 
             {/* 单个按钮 */}
-            <View className='example-item' style={css('example-item')}>
-              <View className='demo-btn' style={css('demo-btn')} onClick={() => handleModalClick(2)}>打开单个按钮模态框</View>
+            <View className='example-item'>
+              <View className='demo-btn' onClick={() => handleModalClick(2)}>打开单个按钮模态框</View>
             </View>
 
             {/* 无标题 */}
-            <View className='example-item' style={css('example-item')}>
-              <View className='demo-btn' style={css('demo-btn')} onClick={() => handleModalClick(3)}>打开无标题模态框</View>
+            <View className='example-item'>
+              <View className='demo-btn' onClick={() => handleModalClick(3)}>打开无标题模态框</View>
             </View>
 
             {/* 简化使用 */}
-            <View className='example-item' style={css('example-item')}>
-              <View className='demo-btn' style={css('demo-btn')} onClick={() => handleModalClick(3)}>打开简化使用模态框</View>
+            <View className='example-item'>
+              <View className='demo-btn' onClick={() => handleModalClick(3)}>打开简化使用模态框</View>
             </View>
           </View>
         </View>
 
         {/* Toast */}
-        <View className='panel' style={css('panel')}>
-          <View className='panel__title' style={css('panel__title')}>Toast 轻提示</View>
-          <View className='panel__content' style={css('panel__content')}>
-            <View className='example-item' style={css('example-item')}>
-              <View className='demo-btn' style={css('demo-btn')} onClick={() => handleToastClick('文本内容', '', '', false, '')}>文本 Toast</View>
+        <View className='panel'>
+          <View className='panel__title'>Toast 轻提示</View>
+          <View className='panel__content'>
+            <View className='example-item'>
+              <View className='demo-btn' onClick={() => handleToastClick('文本内容', '', '', false, '')}>文本 Toast</View>
             </View>
-            <View className='example-item' style={css('example-item')}>
-              <View className='demo-btn' style={css('demo-btn')} onClick={() => handleToastClick('文本内容', 'analytics', '', false, '')}>文本 + ICON</View>
+            <View className='example-item'>
+              <View className='demo-btn' onClick={() => handleToastClick('文本内容', 'analytics', '', false, '')}>文本 + ICON</View>
             </View>
-            <View className='example-item' style={css('example-item')}>
-              <View className='demo-btn' style={css('demo-btn')} onClick={() => handleToastClick('凹凸实验室', '', 'http://storage.360buyimg.com/mtd/home/group-21533885306540.png', false, '')}>自定义图片 Toast</View>
+            <View className='example-item'>
+              <View className='demo-btn' onClick={() => handleToastClick('凹凸实验室', '', 'http://storage.360buyimg.com/mtd/home/group-21533885306540.png', false, '')}>自定义图片 Toast</View>
             </View>
-            <View className='example-item' style={css('example-item')}>
-              <View className='demo-btn' style={css('demo-btn')} onClick={() => handleToastClick('文本内透明遮罩层的作用在于不可点击下面的元素容', '', '', true, '')}>添加遮罩层 Toast</View>
+            <View className='example-item'>
+              <View className='demo-btn' onClick={() => handleToastClick('文本内透明遮罩层的作用在于不可点击下面的元素容', '', '', true, '')}>添加遮罩层 Toast</View>
             </View>
-            <View className='example-item' style={css('example-item')}>
-              <View className='demo-btn' style={css('demo-btn')} onClick={() => handleToastClick('错误提示', '', '', true, 'error')}>错误提示 Toast</View>
+            <View className='example-item'>
+              <View className='demo-btn' onClick={() => handleToastClick('错误提示', '', '', true, 'error')}>错误提示 Toast</View>
             </View>
-            <View className='example-item' style={css('example-item')}>
-              <View className='demo-btn' style={css('demo-btn')} onClick={() => handleToastClick('正确提示', '', '', true, 'success')}>正确提示 Toast</View>
+            <View className='example-item'>
+              <View className='demo-btn' onClick={() => handleToastClick('正确提示', '', '', true, 'success')}>正确提示 Toast</View>
             </View>
-            <View className='example-item' style={css('example-item')}>
-              <View className='demo-btn' style={css('demo-btn')} onClick={() => handleToastClick('正在加载…', '', '', true, 'loading')}>加载中 Toast</View>
+            <View className='example-item'>
+              <View className='demo-btn' onClick={() => handleToastClick('正在加载…', '', '', true, 'loading')}>加载中 Toast</View>
             </View>
           </View>
         </View>
 
         {/* Progress */}
-        <View className='panel' style={css('panel')}>
-          <View className='panel__title' style={css('panel__title')}>Progress 进度条</View>
+        <View className='panel'>
+          <View className='panel__title'>Progress 进度条</View>
           {/* 基础进度条 */}
-          <View className='panel__content panel__content--progress' style={css('panel__content', 'panel__content--progress')}>
-            <View className='example-item__desc' style={css('example-item__desc')}>基础进度条</View>
-            <View className='example-item' style={css('example-item')}>
+          <View className='panel__content panel__content--progress'>
+            <View className='example-item__desc'>基础进度条</View>
+            <View className='example-item'>
               <AtProgress percent={25} />
             </View>
-            <View className='example-item' style={css('example-item')}>
+            <View className='example-item'>
               <AtProgress percent={50} />
             </View>
-            <View className='example-item' style={css('example-item')}>
+            <View className='example-item'>
               <AtProgress percent={75} />
             </View>
           </View>
 
           {/* 隐藏进度文案 */}
-          <View className='panel__content panel__content--progress' style={css('panel__content', 'panel__content--progress')}>
-            <View className='example-item__desc' style={css('example-item__desc')}>隐藏进度文案</View>
-            <View className='example-item' style={css('example-item')}>
+          <View className='panel__content panel__content--progress'>
+            <View className='example-item__desc'>隐藏进度文案</View>
+            <View className='example-item'>
               <AtProgress percent={25} isHidePercent />
             </View>
-            <View className='example-item' style={css('example-item')}>
+            <View className='example-item'>
               <AtProgress percent={75} isHidePercent />
             </View>
           </View>
 
           {/* 不同的状态 */}
-          <View className='panel__content panel__content--progress' style={css('panel__content', 'panel__content--progress')}>
-            <View className='example-item__desc' style={css('example-item__desc')}>不同的状态</View>
-            <View className='example-item' style={css('example-item')}>
-              <View className='example-item__desc' style={css('example-item__desc')}>暂停</View>
+          <View className='panel__content panel__content--progress'>
+            <View className='example-item__desc'>不同的状态</View>
+            <View className='example-item'>
+              <View className='example-item__desc'>暂停</View>
               <AtProgress percent={25} />
             </View>
-            <View className='example-item' style={css('example-item')}>
-              <View className='example-item__desc' style={css('example-item__desc')}>进行中</View>
+            <View className='example-item'>
+              <View className='example-item__desc'>进行中</View>
               <AtProgress percent={50} status='progress' />
             </View>
-            <View className='example-item' style={css('example-item')}>
-              <View className='example-item__desc' style={css('example-item__desc')}>错误</View>
+            <View className='example-item'>
+              <View className='example-item__desc'>错误</View>
               <AtProgress percent={75} status='error' />
             </View>
-            <View className='example-item' style={css('example-item')}>
-              <View className='example-item__desc' style={css('example-item__desc')}>已完成</View>
+            <View className='example-item'>
+              <View className='example-item__desc'>已完成</View>
               <AtProgress percent={100} status='success' />
             </View>
           </View>
         </View>
 
         {/* SwipeAction */}
-        <View className='panel' style={css('panel')}>
-          <View className='panel__title' style={css('panel__title')}>SwipeAction 滑动操作</View>
-          <View className='panel__content' style={css('panel__content')}>
-            <View className='example-item example-item--border' style={css('example-item', 'example-item--border')}>
+        <View className='panel'>
+          <View className='panel__title'>SwipeAction 滑动操作</View>
+          <View className='panel__content'>
+            <View className='example-item example-item--border'>
               <AtSwipeAction onClick={handleSwipeClick} options={OPTIONS}>
-                <View className='normal' style={css('normal')}>AtSwipeAction 一般使用场景</View>
+                <View className='normal'>AtSwipeAction 一般使用场景</View>
               </AtSwipeAction>
             </View>
           </View>
         </View>
 
         {/* Activity Indicator */}
-        <View className='panel' style={css('panel')}>
-          <View className='panel__title' style={css('panel__title')}>Activity Indicator 活动指示器</View>
-          <View className='panel__content' style={css('panel__content')}>
+        <View className='panel'>
+          <View className='panel__title'>Activity Indicator 活动指示器</View>
+          <View className='panel__content'>
             {/* 自定义尺寸 */}
-            <View className='example-item' style={css('example-item')}>
-              <View className='subitem' style={css('subitem')}>
+            <View className='example-item'>
+              <View className='subitem'>
                 <AtActivityIndicator size={20} ></AtActivityIndicator>
               </View>
-              <View className='subitem' style={css('subitem')}>
+              <View className='subitem'>
                 <AtActivityIndicator size={24} />
               </View>
-              <View className='subitem' style={css('subitem')}>
+              <View className='subitem'>
                 <AtActivityIndicator size={32} />
               </View>
             </View>
 
             {/* 自定义颜色 */}
-            <View className='example-item' style={css('example-item')}>
-              <View className='subitem' style={css('subitem')}>
+            <View className='example-item'>
+              <View className='subitem'>
                 <AtActivityIndicator color='#13CE66' />
               </View>
-              <View className='subitem' style={css('subitem')}>
+              <View className='subitem'>
                 <AtActivityIndicator color='#FF4949' />
               </View>
-              <View className='subitem' style={css('subitem')}>
+              <View className='subitem'>
                 <AtActivityIndicator color='#C9C9C9' />
               </View>
             </View>
 
             {/* 垂直水平居中 */}
-            <View className='example-item indicator-panel' style={css('example-item', 'indicator-panel')}>
+            <View className='example-item indicator-panel'>
               <AtActivityIndicator mode='center' />
             </View>
-            <View className='example-item indicator-panel' style={css('example-item', 'indicator-panel')}>
+            <View className='example-item indicator-panel'>
               <AtActivityIndicator mode='center' content='Loading...' />
             </View>
           </View>

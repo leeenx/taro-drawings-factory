@@ -1,4 +1,5 @@
-import React, { createElement } from "react";
+import { createElement } from "react";
+import _ from 'lodash';
 import type { JSXElementConstructor } from "react";
 
 type Css = (...args) => any;
@@ -90,6 +91,30 @@ export default function <T>(css: Css, sourceGlobalComponents: T, pseudoComponent
       const content = afterStyle.content;
       return <Text style={afterStyle} data-pseudo="::after">{content}</Text>;
     };
+    if (Array.isArray(children)) {
+      const currentArrayLen = children.length;
+      const lastIndex = currentArrayLen - 1;
+      let currentIndex = 0;
+      children.forEach(child => {
+        if (_.isObject(child.props)) {
+          const isOdd = currentIndex % 2 === 0;
+          const isEven = !isOdd;
+          const isFirst = currentIndex === 0;
+          const isLast = currentIndex === lastIndex;
+          Object.assign(child.props, {
+            $$nthChildInfo$$: {
+              currentArrayLen,
+              currentIndex,
+              isOdd,
+              isEven,
+              isFirst,
+              isLast
+            }
+          });
+          currentIndex += 1;
+        }
+      })
+    }
     // 微信小程序中，SourceComponent 是字符串，所以需要用 createElement 来实现
     return createElement(SourceComponent, {
       className,

@@ -1,6 +1,6 @@
-import { rem, createCss } from "~/utils";
+import { rem, createTaroComponentsBindCss } from "~/utils";
 
-export default createCss({
+export default createTaroComponentsBindCss({
   'indicator-panel': {
     display: "flex",
     alignItems: "center",

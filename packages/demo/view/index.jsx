@@ -1,4 +1,3 @@
-import { View, Image, Swiper, SwiperItem } from '@tarojs/components';
 import React, { memo, useState } from 'react';
 import { useMemoizedFn } from 'ahooks';
 import {
@@ -19,8 +18,9 @@ import NavigatorBtn from '~/components/navigator-btn';
 
 import curtainPng from '~/assets/images/curtain.png';
 
-import { listMap } from '~/utils';
-import css from './index.css';
+import taroComponents from './index.css';
+
+const { View, Image, Swiper, SwiperItem } = taroComponents;
 
 export default memo(() => {
   const [state, updateState] = useState({
@@ -125,241 +125,220 @@ export default memo(() => {
     const dot = '···'
 
     return (
-      <View className='page' style={css('page')}>
+      <View className='page'>
         {/* S Header */}
         <DocsHeader title='视图' desc='8 个组件'></DocsHeader>
         {/* E Header */}
 
         {/* S Body */}
-        <View className='doc-body' style={css('doc-body')}>
+        <View className='doc-body'>
           {/* Article */}
-          <View className='panel' style={css('panel')}>
-            <View className='panel__title' style={css('panel__title')}>Article 文章</View>
-            <View className='panel__content' style={css('panel__content')}>
-              <View className='example-item' style={css('example-item')}>
+          <View className='panel'>
+            <View className='panel__title'>Article 文章</View>
+            <View className='panel__content'>
+              <View className='example-item'>
                 <NavigatorBtn webPackage="/demo/" page='Article'></NavigatorBtn>
               </View>
             </View>
           </View>
 
           {/* Avatar */}
-          <View className='panel' style={css('panel')}>
-            <View className='panel__title' style={css('panel__title')}>Avatar 头像</View>
-            <View className='panel__content' style={css('panel__content')}>
+          <View className='panel'>
+            <View className='panel__title'>Avatar 头像</View>
+            <View className='panel__content'>
               {/* 圆形头像 */}
-              <View className='example-item' style={css('example-item')}>
-                {
-                  listMap(
-                    [
-                      <AtAvatar circle size='small' image={avatarImg}></AtAvatar>,
-                      <AtAvatar circle image={avatarImg}></AtAvatar>,
-                      <AtAvatar circle size='large' image={avatarImg}></AtAvatar>,
-                    ],
-                    (item, index) => {
-                      return <View className='subitem' style={css('subitem')} key={index}>{item}</View>
-                    }
-                  )
-                }
+              <View className='example-item'>
+                <View className='subitem'>
+                  <AtAvatar circle size='small' image={avatarImg}></AtAvatar>
+                </View>
+                <View className='subitem'>
+                  <AtAvatar circle image={avatarImg}></AtAvatar>
+                </View>
+                <View className='subitem'>
+                  <AtAvatar circle size='large' image={avatarImg}></AtAvatar>
+                </View>
               </View>
               {/* 圆角矩形头像 */}
-              <View className='example-item' style={css('example-item')}>
-                {
-                  listMap(
-                    [
-                      <AtAvatar size='small' image={avatarImg}></AtAvatar>,
-                      <AtAvatar image={avatarImg}></AtAvatar>,
-                      <AtAvatar size='large' image={avatarImg}></AtAvatar>,
-                    ],
-                    (item, index) => {
-                      return <View className='subitem' style={css('subitem')} key={index}>{item}</View>
-                    }
-                  )
-                }
+              <View className='example-item'>
+                <View className='subitem'>
+                  <AtAvatar size='small' image={avatarImg}></AtAvatar>
+                </View>
+                <View className='subitem'>
+                  <AtAvatar image={avatarImg}></AtAvatar>
+                </View>
+                <View className='subitem'>
+                  <AtAvatar size='large' image={avatarImg}></AtAvatar>
+                </View>
               </View>
               {/* 圆形头像（支持文本） */}
-              <View className='example-item' style={css('example-item')}>
-                {
-                  listMap(
-                    [
-                      <AtAvatar circle size='small' text='凹'></AtAvatar>,
-                      <AtAvatar circle text='凹'></AtAvatar>,
-                      <AtAvatar circle size='large' text='凹'></AtAvatar>,
-                    ],
-                    (item, index) => {
-                      return <View className='subitem' style={css('subitem')} key={index}>{item}</View>
-                    }
-                  )
-                }
+              <View className='example-item'>
+                <View className='subitem'>
+                  <AtAvatar circle size='small' text='凹'></AtAvatar>
+                </View>
+                <View className='subitem'>
+                  <AtAvatar circle text='凹'></AtAvatar>
+                </View>
+                <View className='subitem'>
+                  <AtAvatar circle size='large' text='凹'></AtAvatar>
+                </View>
               </View>
             </View>
           </View>
 
           {/* Badge */}
-          <View className='panel' style={css('panel')}>
-            <View className='panel__title' style={css('panel__title')}>Badge 徽标</View>
-            <View className='panel__content' style={css('panel__content')}>
+          <View className='panel'>
+            <View className='panel__title'>Badge 徽标</View>
+            <View className='panel__content'>
               {/* 数字 + 小红点 */}
-              <View className='example-item' style={css('example-item')}>
-                {
-                  listMap(
-                    [
-                      <AtBadge value='10' maxValue={99}>
-                        <AtButton size='small' circle>按钮</AtButton>
-                      </AtBadge>,
-                      <AtBadge value='100' maxValue={99}>
-                        <AtButton size='small'>按钮</AtButton>
-                      </AtBadge>,
-                      <AtBadge dot>
-                        <AtButton size='small' circle>按钮</AtButton>
-                      </AtBadge>,
-                      <AtBadge dot>
-                        <AtButton size='small'>按钮</AtButton>
-                      </AtBadge>,
-                    ],
-                    (item, index) => {
-                      return <View className='subitem subitem--badge' style={css('subitem', 'subitem--badge')} key={index}>{item}</View>
-                    }
-                  )
-                }
+              <View className='example-item'>
+                <View className='subitem subitem--badge'>
+                  <AtBadge value='10' maxValue={99}>
+                    <AtButton size='small' circle>按钮</AtButton>
+                  </AtBadge>
+                </View>
+                <View className='subitem subitem--badge'>
+                  <AtBadge value='100' maxValue={99}>
+                    <AtButton size='small'>按钮</AtButton>
+                  </AtBadge>
+                </View>
+                <View className='subitem subitem--badge'>
+                  <AtBadge dot>
+                    <AtButton size='small' circle>按钮</AtButton>
+                  </AtBadge>
+                </View>
+                <View className='subitem subitem--badge'>
+                  <AtBadge dot>
+                    <AtButton size='small'>按钮</AtButton>
+                  </AtBadge>
+                </View>
               </View>
 
               {/* 文本 + 省略号 */}
-              <View className='example-item' style={css('example-item')}>
-                {
-                  listMap(
-                    [
-                      <AtBadge value='NEW'>
-                        <AtButton size='small' circle>按钮</AtButton>
-                      </AtBadge>,
-                      <AtBadge value='NEW'>
-                        <AtButton size='small'>按钮</AtButton>
-                      </AtBadge>,
-                      <AtBadge value={dot}>
-                        <AtButton size='small' circle>按钮</AtButton>
-                      </AtBadge>,
-                      <AtBadge value={dot}>
-                        <AtButton size='small'>按钮</AtButton>
-                      </AtBadge>,
-                    ],
-                    (item, index) => {
-                      return <View className='subitem subitem--badge' style={css('subitem', 'subitem--badge')} key={index}>{item}</View>
-                    }
-                  )
-                }
+              <View className='example-item'>
+                <View className='subitem subitem--badge'>
+                  <AtBadge value='NEW'><AtButton size='small' circle>按钮</AtButton></AtBadge>
+                </View>
+                <View className='subitem subitem--badge'>
+                  <AtBadge value='NEW'><AtButton size='small'>按钮</AtButton></AtBadge>
+                </View>
+                <View className='subitem subitem--badge'>
+                  <AtBadge value={dot}><AtButton size='small' circle>按钮</AtButton></AtBadge>
+                </View>
+                <View className='subitem subitem--badge'>
+                  <AtBadge value={dot}><AtButton size='small'>按钮</AtButton></AtBadge>
+                </View>
               </View>
             </View>
           </View>
 
           {/* Tag */}
-          <View className='panel' style={css('panel')}>
-            <View className='panel__title' style={css('panel__title')}>Tag 标签</View>
-            <View className='panel__content' style={css('panel__content')}>
+          <View className='panel'>
+            <View className='panel__title'>Tag 标签</View>
+            <View className='panel__content'>
               {/* 空心标签 */}
-              <View className='example-item' style={css('example-item')}>
-                {listMap(state.hollowTagList, (item, index) => (
-                  <View className='subitem' style={css('subitem')} key={index}>
-                    <AtTag
-                      name={item.name}
-                      active={item.active}
-                      circle={index % 2 === 0}
-                      onClick={handleHollowClick}
-                    >标签</AtTag>
-                  </View>
-                ))}
+              <View className='example-item'>
+                {
+                  state.hollowTagList.map((item, index) => (
+                    <View className='subitem' key={index}>
+                      <AtTag
+                        name={item.name}
+                        active={item.active}
+                        circle={index % 2 === 0}
+                        onClick={handleHollowClick}
+                      >标签</AtTag>
+                    </View>
+                  ))
+                }
               </View>
 
               {/* 实心标签 */}
-              <View className='example-item' style={css('example-item')}>
-                {listMap(state.solidTagList, (item, index) => (
-                  <View className='subitem' style={css('subitem')} key={index}>
-                    <AtTag
-                      type='primary'
-                      name={item.name}
-                      active={item.active}
-                      circle={index % 2 === 0}
-                      onClick={handleSolidClick}
-                    >标签</AtTag>
-                  </View>
-                ))}
+              <View className='example-item'>
+                {
+                  state.solidTagList.map((item, index) => (
+                    <View className='subitem' key={index}>
+                      <AtTag
+                        type='primary'
+                        name={item.name}
+                        active={item.active}
+                        circle={index % 2 === 0}
+                        onClick={handleSolidClick}
+                      >标签</AtTag>
+                    </View>
+                  ))
+                }
               </View>
 
               {/* 不可点击态 */}
-              <View className='example-item' style={css('example-item')}>
-                {
-                  listMap(
-                    [
-                      <AtTag type='primary' circle disabled>标签</AtTag>,
-                      <AtTag type='primary' disabled>标签</AtTag>,
-                    ],
-                    (item, index) => {
-                      return <View className='subitem' style={css('subitem')} key={index}>{item}</View>
-                    }
-                  )
-                }
+              <View className='example-item'>
+                <View className='subitem'>
+                  <AtTag type='primary' circle disabled>标签</AtTag>
+                </View>
+                <View className='subitem'>
+                  <AtTag type='primary' disabled>标签</AtTag>
+                </View>
               </View>
 
               {/* 空心标签（小） */}
-              <View className='example-item' style={css('example-item')}>
-                {listMap(state.hollowTagList2, (item, index) => (
-                  <View className='subitem' style={css('subitem')} key={index}>
-                    <AtTag
-                      size='small'
-                      name={item.name}
-                      active={item.active}
-                      circle={index % 2 === 0}
-                      onClick={handleHollowSmallClick}
-                    >标签</AtTag>
-                  </View>
-                ))}
+              <View className='example-item'>
+                {
+                  state.hollowTagList2.map((item, index) => (
+                    <View className='subitem' key={index}>
+                      <AtTag
+                        size='small'
+                        name={item.name}
+                        active={item.active}
+                        circle={index % 2 === 0}
+                        onClick={handleHollowSmallClick}
+                      >标签</AtTag>
+                    </View>
+                  ))
+                }
               </View>
 
               {/* 实心标签（小） */}
-              <View className='example-item' style={css('example-item')}>
-                {listMap(state.solidTagList2, (item, index) => (
-                  <View className='subitem' style={css('subitem')} key={index}>
-                    <AtTag
-                      size='small'
-                      type='primary'
-                      name={item.name}
-                      active={item.active}
-                      circle={index % 2 === 0}
-                      onClick={handleSolidSmallClick}
-                    >标签</AtTag>
-                  </View>
-                ))}
+              <View className='example-item'>
+                {
+                  state.solidTagList2.map((item, index) => (
+                    <View className='subitem' key={index}>
+                      <AtTag
+                        size='small'
+                        type='primary'
+                        name={item.name}
+                        active={item.active}
+                        circle={index % 2 === 0}
+                        onClick={handleSolidSmallClick}
+                      >标签</AtTag>
+                    </View>
+                  ))
+                }
               </View>
 
               {/* 不可点击态（小） */}
-              <View className='example-item' style={css('example-item')}>
-                {
-                  listMap(
-                    [
-                      <AtTag size='small' type='primary' circle disabled>标签</AtTag>,
-                      <AtTag size='small' type='primary' disabled>标签</AtTag>,
-                    ],
-                    (item, index) => {
-                      return <View className='subitem' style={css('subitem')} key={index}>{item}</View>
-                    }
-                  )
-                }
+              <View className='example-item'>
+                <View className='subitem'>
+                  <AtTag size='small' type='primary' circle disabled>标签</AtTag>
+                </View>
+                <View className='subitem'>
+                  <AtTag size='small' type='primary' disabled>标签</AtTag>
+                </View>
               </View>
             </View>
           </View>
 
           {/* Countdown */}
-          <View className='panel' style={css('panel')}>
-            <View className='panel__title' style={css('panel__title')}>Countdown 倒计时</View>
-            <View className='panel__content' style={css('panel__content')}>
+          <View className='panel'>
+            <View className='panel__title'>Countdown 倒计时</View>
+            <View className='panel__content'>
               {/* 一般用法 */}
-              <View className='example-item' style={css('example-item')}>
+              <View className='example-item'>
                 <AtCountdown minutes={5} seconds={10} />
               </View>
-              <View className='example-item' style={css('example-item')}>
+              <View className='example-item'>
                 <AtCountdown isShowDay hours={1} minutes={5} seconds={10} />
               </View>
 
               {/* 自定义格式 */}
-              <View className='example-item' style={css('example-item')}>
+              <View className='example-item'>
                 <AtCountdown
                   format={{ hours: ':', minutes: ':', seconds: '' }}
                   minutes={5}
@@ -368,7 +347,7 @@ export default memo(() => {
               </View>
 
               {/* 卡片式 */}
-              <View className='example-item' style={css('example-item')}>
+              <View className='example-item'>
                 <AtCountdown
                   isCard
                   isShowDay
@@ -382,14 +361,13 @@ export default memo(() => {
           </View>
 
           {/* Curtain */}
-          <View className='panel' style={css('panel')}>
-            <View className='panel__title' style={css('panel__title')}>Curtain 幕帘</View>
-            <View className='panel__content' style={css('panel__content')}>
+          <View className='panel'>
+            <View className='panel__title'>Curtain 幕帘</View>
+            <View className='panel__content'>
               {/* 一般用法 */}
-              <View className='example-item' style={css('example-item')}>
+              <View className='example-item'>
                 <View
                   className='demo-btn'
-                  style={css('demo-btn')}
                   onClick={() => handleCurtainClick(true)}
                 >显示幕帘</View>
               </View>
@@ -397,49 +375,49 @@ export default memo(() => {
           </View>
 
           {/* Noticebar */}
-          <View className='panel' style={css('panel')}>
-            <View className='panel__title' style={css('panel__title')}>Noticebar 通告栏</View>
-            <View className='panel__content' style={css('panel__content')}>
+          <View className='panel'>
+            <View className='panel__title'>Noticebar 通告栏</View>
+            <View className='panel__content'>
               {/* 一般用法 */}
-              <View className='example-item' style={css('example-item')}>
+              <View className='example-item'>
                 <AtNoticebar single>[单行] 这是NoticeBar通告栏，这是NoticeBar通告栏，这是NoticeBar通告栏</AtNoticebar>
               </View>
-              <View className='example-item' style={css('example-item')}>
+              <View className='example-item'>
                 <AtNoticebar icon='volume-plus' single>[单行] 这是NoticeBar通告栏，这是NoticeBar通告栏，这是NoticeBar通告栏</AtNoticebar>
               </View>
-              <View className='example-item' style={css('example-item')}>
+              <View className='example-item'>
                 <AtNoticebar>[多行] 这是NoticeBar通告栏，这是NoticeBar通告栏，这是NoticeBar通告栏，这是NoticeBar通告栏，这是NoticeBar通告栏</AtNoticebar>
               </View>
 
               {/* 跑马灯 */}
-              <View className='example-item' style={css('example-item')}>
+              <View className='example-item'>
                 <AtNoticebar marquee>[纯文字]这是NoticeBar通告栏，这是NoticeBar通告栏，这是NoticeBar通告栏[结束]</AtNoticebar>
               </View>
-              <View className='example-item' style={css('example-item')}>
+              <View className='example-item'>
                 <AtNoticebar marquee icon='volume-plus'>[带icon]这是NoticeBar通告栏，这是NoticeBar通告栏，这是NoticeBar通告栏这是NoticeBar通告栏，这是NoticeBar通告栏，这是NoticeBar通告栏[结束]</AtNoticebar>
               </View>
 
               {/* 查看更多 */}
-              <View className='example-item' style={css('example-item')}>
+              <View className='example-item'>
                 <AtNoticebar showMore single>[单行] 这是NoticeBar通告栏，这是NoticeBar通告栏，这是NoticeBar通告栏</AtNoticebar>
               </View>
 
               {/* 关闭按钮 */}
-              <View className='example-item' style={css('example-item')}>
+              <View className='example-item'>
                 <AtNoticebar close single>[单行] 这是NoticeBar通告栏，这是NoticeBar通告栏，这是NoticeBar通告栏</AtNoticebar>
               </View>
-              <View className='example-item' style={css('example-item')}>
+              <View className='example-item'>
                 <AtNoticebar close>[多行] 这是NoticeBar通告栏，这是NoticeBar通告栏，这是NoticeBar通告栏，这是NoticeBar通告栏，这是NoticeBar通告栏</AtNoticebar>
               </View>
             </View>
           </View>
 
           {/* Steps */}
-          <View className='panel' style={css('panel')}>
-            <View className='panel__title' style={css('panel__title')}>Steps 步骤条</View>
-            <View className='panel__content' style={css('panel__content')}>
+          <View className='panel'>
+            <View className='panel__title'>Steps 步骤条</View>
+            <View className='panel__content'>
               {/* 一般用法 */}
-              <View className='example-item example-item--steps' style={css('example-item', 'example-item--steps')}>
+              <View className='example-item example-item--steps'>
                 <AtSteps
                   items={[
                     { 'title': '步骤一' },
@@ -451,7 +429,7 @@ export default memo(() => {
               </View>
 
               {/* 带附加信息 */}
-              <View className='example-item example-item--steps' style={css('example-item', 'example-item--steps')}>
+              <View className='example-item example-item--steps'>
                 <AtSteps
                   items={[
                     { 'title': '步骤一', 'desc': '这里是额外的信息，最多两行' },
@@ -464,7 +442,7 @@ export default memo(() => {
               </View>
 
               {/* 自定义图标 */}
-              <View className='example-item example-item--steps' style={css('example-item', 'example-item--steps')}>
+              <View className='example-item example-item--steps'>
                 <AtSteps
                   items={[
                     {
@@ -504,7 +482,7 @@ export default memo(() => {
               </View>
 
               {/* 状态步骤条 */}
-              <View className='example-item example-item--steps' style={css('example-item', 'example-item--steps')}>
+              <View className='example-item example-item--steps'>
                 <AtSteps
                   items={[
                     {
@@ -531,11 +509,11 @@ export default memo(() => {
           </View>
 
           {/* Swiper */}
-          <View className='panel' style={css('panel')}>
-            <View className='panel__title' style={css('panel__title')}>Swiper 滑块视图容器</View>
-            <View className='panel__content' style={css('panel__content')}>
+          <View className='panel'>
+            <View className='panel__title'>Swiper 滑块视图容器</View>
+            <View className='panel__content'>
               {/* 一般用法 */}
-              <View className='example-item' style={css('example-item')}>
+              <View className='example-item'>
                 <Swiper
                   indicatorColor='#999'
                   indicatorActiveColor='#333'
@@ -560,12 +538,12 @@ export default memo(() => {
           </View>
 
           {/* Timeline */}
-          <View className='panel' style={css('panel')}>
-            <View className='panel__title' style={css('panel__title')}>Timeline 时间轴</View>
-            <View className='panel__content' style={css('panel__content')}>
+          <View className='panel'>
+            <View className='panel__title'>Timeline 时间轴</View>
+            <View className='panel__content'>
               {/* 一般用法 */}
-              <View className='example-item' style={css('example-item')}>
-                <View className='example-item__desc' style={css('example-item__desc')}>一般用法</View>
+              <View className='example-item'>
+                <View className='example-item__desc'>一般用法</View>
                 <AtTimeline
                   items={[
                     { title: '刷牙洗脸' },
@@ -577,8 +555,8 @@ export default memo(() => {
               </View>
 
               {/* 自定义图标 */}
-              <View className='example-item' style={css('example-item')}>
-                <View className='example-item__desc' style={css('example-item__desc')}>自定义图标</View>
+              <View className='example-item'>
+                <View className='example-item__desc'>自定义图标</View>
                 <AtTimeline
                   items={[
                     { title: '刷牙洗脸', icon: 'check-circle' },
@@ -590,8 +568,8 @@ export default memo(() => {
               </View>
 
               {/* 幽灵节点 */}
-              <View className='example-item' style={css('example-item')}>
-                <View className='example-item__desc' style={css('example-item__desc')}>幽灵节点</View>
+              <View className='example-item'>
+                <View className='example-item__desc'>幽灵节点</View>
                 <AtTimeline
                   pending
                   items={[
@@ -604,8 +582,8 @@ export default memo(() => {
               </View>
 
               {/* 丰富内容 */}
-              <View className='example-item' style={css('example-item')}>
-                <View className='example-item__desc' style={css('example-item__desc')}>丰富内容</View>
+              <View className='example-item'>
+                <View className='example-item__desc'>丰富内容</View>
                 <AtTimeline
                   pending
                   items={[
@@ -619,22 +597,22 @@ export default memo(() => {
             </View>
 
             {/* Divider */}
-            <View className='panel' style={css('panel')}>
-              <View className='panel__title' style={css('panel__title')}>Divider 分隔线</View>
-              <View className='panel__content' style={css('panel__content')}>
+            <View className='panel'>
+              <View className='panel__title'>Divider 分隔线</View>
+              <View className='panel__content'>
                 {/* 一般用法 */}
-                <View className='example-item' style={css('example-item')}>
+                <View className='example-item'>
                   <AtDivider content='没有更多了' />
                 </View>
               </View>
             </View>
 
             {/* LoadMore */}
-            <View className='panel' style={css('panel')}>
-              <View className='panel__title' style={css('panel__title')}>Load More 页面提示</View>
-              <View className='panel__content no-padding' style={css('panel__content', 'no-padding')}>
+            <View className='panel'>
+              <View className='panel__title'>Load More 页面提示</View>
+              <View className='panel__content no-padding'>
                 {/* 一般用法 */}
-                <View className='example-item' style={css('example-item')}>
+                <View className='example-item'>
                   <AtLoadMore onClick={handleLoadMoreClick} status={loadMoreStatus} />
                 </View>
               </View>

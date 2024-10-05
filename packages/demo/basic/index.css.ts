@@ -1,6 +1,6 @@
-import { rem, createCss } from "~/utils";
+import { rem, createTaroComponentsBindCss } from "~/utils";
 
-export default createCss({
+export default createTaroComponentsBindCss({
   test(color: string = 'red') {
     return { color };
   },

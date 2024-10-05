@@ -1,6 +1,6 @@
-import { rem, createCss } from "~/utils";
+import { rem, createTaroComponentsBindCss } from "~/utils";
 
-export default createCss({
+export default createTaroComponentsBindCss({
   'subitem': {
     display: 'inline-block',
     verticalAlign: 'middle',

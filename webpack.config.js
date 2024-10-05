@@ -120,19 +120,22 @@ const HOST = isDev ? '127.0.0.1' : 'www.leeenx.cn';
 const PORT = isDev ? 9000 : undefined;
 const PATH = process.env.BASE;
 
-const publicPath = PORT ? `${PROTOCOL}//${HOST}:${PORT}/` : `${PROTOCOL}//${HOST}/${PATH}/`
-
-taroH5Container.create(publicPath);
-
 const KbsDslParserPlugin = require('kbs-dsl-parser');
 
 let base = process.env.BASE || '';
-if (base) base = `/${base}`;
+if (base) base = `/${base}/`;
+const publicPath = PORT ? `${PROTOCOL}//${HOST}:${PORT}${base || '/'}` : `${PROTOCOL}//${HOST}${base}`;
+
+console.log('### publicPath', publicPath);
+
+taroH5Container.create(publicPath);
 
 // 默认插件列表，不包含 mpa
 const plugins = [
   new webpack.DefinePlugin({
     'process.env.BASE': JSON.stringify(base),
+    // 运行时的 publicPath 结尾不带「/」
+    'process.env.PUBLIC_PATH': JSON.stringify(publicPath.replace(/\/$/, ''))
   }),
   new CleanWebpackPlugin(),
   new HtmlWebpackPlugin({
