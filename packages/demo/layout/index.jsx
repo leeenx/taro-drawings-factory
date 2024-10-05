@@ -50,6 +50,7 @@ export default memo(() => {
       }
     ],
     isFloatLayoutOpened: false,
+    open: false,
   });
 
   useEffect(() => {
@@ -61,6 +62,13 @@ export default memo(() => {
       ...state,
       isFloatLayoutOpened: flag
     })
+  });
+
+  const handleAccordionClick = useMemoizedFn((value) => {
+    setState({
+      ...state,
+      open: value,
+    });
   });
 
   return (
@@ -147,7 +155,7 @@ export default memo(() => {
           <View className='panel__title'>Accordion 手风琴</View>
           <View className='panel__content no-padding'>
             <View className='example-item'>
-              <AtAccordion title='展开列表'>
+              <AtAccordion title='展开列表' open={state.open} onClick={handleAccordionClick}>
                 <AtList hasBorder={false}>
                   <AtListItem
                     title='标题文字'
@@ -179,14 +187,14 @@ export default memo(() => {
           <View className='panel__title'>Card 卡片</View>
           <View className='panel__content no-padding'>
             <View className='example-item example-item--card'>
-              <View className='example-item__desc'>基础卡片</View>
+              <View className='example-item__desc padding-horizontal'>基础卡片</View>
               <AtCard title='这是个标题'>
                 这也是内容区 可以随意定义功能
               </AtCard>
             </View>
 
             <View className='example-item example-item--card'>
-              <View className='example-item__desc'>带图标的卡片</View>
+              <View className='example-item__desc padding-horizontal'>带图标的卡片</View>
               <AtCard
                 title='这是个标题'
                 icon={{ value: 'tags', color: '#77a1fd' }}
@@ -196,7 +204,7 @@ export default memo(() => {
             </View>
 
             <View className='example-item example-item--card'>
-              <View className='example-item__desc'>完整的卡片</View>
+              <View className='example-item__desc padding-horizontal'>完整的卡片</View>
               <AtCard
                 note='小Tips'
                 extra='额外信息'
@@ -208,7 +216,7 @@ export default memo(() => {
             </View>
 
             <View className='example-item example-item--card'>
-              <View className='example-item__desc'>通栏卡片</View>
+              <View className='example-item__desc padding-horizontal'>通栏卡片</View>
               <AtCard
                 isFull
                 note='小Tips'

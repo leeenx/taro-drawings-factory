@@ -18,6 +18,9 @@ const taroComponents = createTaroComponentsBindCss({
   },
   'example-item--card': {
     marginTop: rem(48),
+  },
+  'padding-horizontal': {
+    padding: `0 ${rem(60)}`,
   }
 });
 

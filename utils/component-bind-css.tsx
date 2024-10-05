@@ -9,9 +9,18 @@ type Css = (...args) => any;
  * 通过对全局组件进行封装后，以下组件将会自动生成【::before】与【::after】:
  * view、text、button、label、cover-view、movable-view
  */
-const pseudoComponents: string[] = ['View', 'Text', 'Button', 'Label', 'CoverView', 'MovableView'];
-export default function <T>(css: Css, sourceGlobalComponents: T) {
-  const Text = sourceGlobalComponents['Text'] as JSXElementConstructor<any>;
+const defaultPseudoComponentMapping: Record<string, string> = {
+  View: 'View', 
+  Text: 'Text', 
+  Button: 'Button', 
+  Label: 'Label', 
+  CoverView: 'CoverView', 
+  MovableView: 'MovableView'
+};
+export default function <T>(css: Css, sourceGlobalComponents: T, pseudoComponentMapping = defaultPseudoComponentMapping) {
+  const textComponentName = pseudoComponentMapping.View;
+  const Text = sourceGlobalComponents[textComponentName] as JSXElementConstructor<any>;
+  const pseudoComponentNames = Object.values(pseudoComponentMapping);
   const globalComponents: T = {} as T;
 
   // 生成有伪类的组件
@@ -106,7 +115,7 @@ export default function <T>(css: Css, sourceGlobalComponents: T) {
   Object.keys(sourceGlobalComponents as Object).forEach((componentName) => {
     const key: string = componentName;
     const SourceComponent = sourceGlobalComponents[key] as JSXElementConstructor<any>;
-    if (pseudoComponents.includes(key)) {
+    if (pseudoComponentNames.includes(key)) {
       globalComponents[key] = createComponentWithPseudo(SourceComponent);
     } else {
       globalComponents[key] = createComponentWithoutPseudo(SourceComponent);
