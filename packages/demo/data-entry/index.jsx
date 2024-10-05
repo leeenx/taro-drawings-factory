@@ -22,8 +22,6 @@ import css from './index.css';
 
 const { View, Picker, PickerView, PickerViewColumn } = css;
 
-console.log('-----', { View, Picker, PickerView, PickerViewColumn });
-
 const getYearsMonthsDays = () => {
   const date = new Date()
   const years = []
@@ -84,7 +82,7 @@ export default memo(() => {
     rangeValue: [20, 60],
     rateValue: 3,
     searchbarValue: '',
-    switchValue: false,
+    switchValue: true,
     textareaValue: '',
   });
 
