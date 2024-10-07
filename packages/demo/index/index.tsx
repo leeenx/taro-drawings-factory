@@ -1,11 +1,12 @@
 import { useShareAppMessage } from '@tarojs/taro';
 import { memo, useState } from "react";
-import { View, Image } from '@tarojs/components';
 import { useMemoizedFn } from "ahooks";
 
 import LOGO_IMAGE from '~/assets/images/logo_taro.png';
 
-import css from './index.css';
+import taroComponents from './index.css';
+
+const { View, Image } = taroComponents;
 
 export default memo(() => {
   const [state] = useState({
@@ -63,12 +64,12 @@ export default memo(() => {
   const { list } = state;
 
   return (
-    <View className='page page-index' style={css.page}>
-      <View className='logo' style={css.logo}>
-        <Image src={LOGO_IMAGE} className='img' mode='widthFix' style={css.logoImg} />
+    <View className='page page-index'>
+      <View className='logo'>
+        <Image src={LOGO_IMAGE} className='img' mode='widthFix' />
       </View>
-      <View className='page-title' style={css.title}>Taro UI</View>
-      <View className='module-list' style={css.list}>
+      <View className='page-title'>Taro UI</View>
+      <View className='module-list'>
         {list.map((item, index) => (
           <View
             className='module-list__item'
@@ -76,11 +77,9 @@ export default memo(() => {
             data-id={item.id}
             data-name={item.title}
             onClick={gotoPanel}
-            style={css.item}
           >
-            <View className='module-list__item-title' style={css.itemTitle}>{item.title}</View>
-            <View className='module-list__item-content' style={css.itemContent}>{item.content}</View>
-            <View style={css.itemAfter} />
+            <View className='module-list__item-title'>{item.title}</View>
+            <View className='module-list__item-content'>{item.content}</View>
           </View>
         ))}
       </View>

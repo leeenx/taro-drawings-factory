@@ -12,7 +12,7 @@ export default createTaroComponentsBindCss({
   'subitem': {
     marginLeft: rem(32),
     flex: "0 0 auto",
-    ':first-child': {
+    '&:first-child': {
       marginLeft: 0,
     }
   },

@@ -1,7 +1,6 @@
-import React from 'react';
-import { View } from '@tarojs/components'
+import taroComponents from './index.css';
 
-import css from './index.css';
+const { View } = taroComponents;
 
 interface Props {
   title: string;
@@ -12,10 +11,9 @@ export default (props: Props) => {
   const { title = '标题', desc = '' } = props;
 
   return (
-    <View className='doc-header' style={css.header}>
-      <View className='doc-header__title' style={css.title}>{title}</View>
-      <View className='doc-header__desc' style={css.desc}>{desc}</View>
-      <View style={css.headerAfter} />
+    <View className='doc-header'>
+      <View className='doc-header__title'>{title}</View>
+      <View className='doc-header__desc'>{desc}</View>
     </View>
   )
 }

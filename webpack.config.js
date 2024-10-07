@@ -126,8 +126,6 @@ let base = process.env.BASE || '';
 if (base) base = `/${base}/`;
 const publicPath = PORT ? `${PROTOCOL}//${HOST}:${PORT}${base || '/'}` : `${PROTOCOL}//${HOST}${base}`;
 
-console.log('### publicPath', publicPath);
-
 taroH5Container.create(publicPath);
 
 // 默认插件列表，不包含 mpa

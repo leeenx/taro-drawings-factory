@@ -66,11 +66,12 @@ const create = (publicPath) => {
       }
     </script>
     <% } %>`;
-    let newHtmlTemplateContent = htmlTemplateContent.replace(/src="\/js\//g, `src="${publicPath}/js/`);
-    newHtmlTemplateContent = newHtmlTemplateContent.replace(/href="\/css\//g, `href="${publicPath}/css/`);
+    let newHtmlTemplateContent = htmlTemplateContent.replace(/src="\/js\//g, `src="${publicPath}js/`);
+    newHtmlTemplateContent = newHtmlTemplateContent.replace(/href="\/css\//g, `href="${publicPath}css/`);
     newHtmlTemplateContent = newHtmlTemplateContent.replace('</body></html>', `${injectScript}</body></html>`);
     
     fs.writeFileSync(htmlTemplate, newHtmlTemplateContent);
+    console.log('+++++ write version', webPackageTaroH5Version);
     fs.writeFileSync(versionFile, webPackageTaroH5Version);
   };
 
@@ -84,23 +85,33 @@ const create = (publicPath) => {
     // 报错
     throw new Error("缺少关键依赖：「web-package-taro-h5」，请安装");
   } else {
+    let versionFileExists = true;
     try {
       fs.accessSync(versionFile);
-      const cacheVersion = fs.readFileSync(versionFile, 'utf-8');
-      if (cacheVersion !== webPackageTaroH5Version) {
-        // 需要删除
-        fs.rmdirSync(npmWebPackageTaroH5Dir);
-        // 重新生成新的缓存
+    } catch (err) {
+      versionFileExists = false;
+    }
+    if (versionFileExists) {
+      try {
+        const cacheVersion = fs.readFileSync(versionFile, 'utf-8');
+        if (cacheVersion !== webPackageTaroH5Version) {
+          // 需要删除
+          fs.rmdirSync(webPackageTaroH5Dir, { recursive:true, force:true });
+          // 重新生成新的缓存
+          initWebPackageTaroH5Dir();
+        }
+      } catch(err) {
+        console.error(`初始化文件夹${webPackageTaroH5Dir}失败：`, err);
+      }
+    } else {
+      // 版本文件不存在
+      try {
+        fs.accessSync(webPackageTaroH5Dir);
+      } catch (err) {
+        // 初始化目录
         initWebPackageTaroH5Dir();
       }
-    } catch {}
-  }
-
-  try {
-    fs.accessSync(webPackageTaroH5Dir);
-  } catch (err) {
-    // 初始化目录
-    initWebPackageTaroH5Dir();
+    }
   }
 };
 

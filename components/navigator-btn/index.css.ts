@@ -1,6 +1,6 @@
-import { rem, createCss } from "../../utils";
+import { rem, createTaroComponentsBindCss } from "../../utils";
 
-export default createCss({
+export default createTaroComponentsBindCss({
   'demo-goto-btn': {
     // #5274A0
     position: "relative",
@@ -12,15 +12,16 @@ export default createCss({
     borderRadius: rem(8),
     background: "#5274A0",
     overflow: "hidden",
+    '&::after': {
+      content: '→',
+      position: "absolute",
+      top: 0,
+      right: 0,
+      display: "flex",
+      alignItems: "center",
+      padding: `0 ${rem(12)}`,
+      height: "100%",
+      background: "#345B8F",
+    }
   },
-  'demo-goto-btn::after': {
-    position: "absolute",
-    top: 0,
-    right: 0,
-    display: "flex",
-    alignItems: "center",
-    padding: `0 ${rem(12)}`,
-    height: "100%",
-    background: "#345B8F",
-  }
 });

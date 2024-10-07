@@ -39,7 +39,7 @@
     "html-webpack-plugin": "^5.5.3",
     "kbs-dsl-parser": "^1.1.9",
     "terser-webpack-plugin": "^5.3.9",
-    "web-package-taro-h5": "^0.0.5",
+    "web-package-taro-h5": "^0.0.7",
     "webpack": "^5.88.2",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^4.15.1"

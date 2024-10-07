@@ -26,11 +26,11 @@ export default createTaroComponentsBindCss({
     display: "flex",
     justifyContent: "space-between",
     padding: rem(24),
-    '::before': Object.assign({}, afterStyle, {
+    '&::before': Object.assign({}, afterStyle, {
       top: 0,
       bottom: 'auto'
     }),
-    '::after': Object.assign({}, afterStyle),
+    '&::after': Object.assign({}, afterStyle),
     '&__label': labelStyle,
     '&__value': {
       ...labelStyle,

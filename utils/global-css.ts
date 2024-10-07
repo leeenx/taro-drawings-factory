@@ -10,7 +10,7 @@ setGlobalStyle({
   },
   'example-item': {
     marginBottom: rem(20),
-    ':last-child': {
+    '&:last-child': {
       marginBottom: 0,
     }
   },
@@ -34,7 +34,7 @@ setGlobalStyle({
     display: "inline-block",
     marginLeft: rem(32),
     verticalAlign: "middle",
-    ':first-child': {
+    '&:first-child': {
       marginLeft: 0,
     }
   },
@@ -43,7 +43,7 @@ setGlobalStyle({
   },
   'panel': {
     margin: `${rem(80)} 0 ${rem(56)}`,
-    ':first-child': {
+    '&:first-child': {
       marginTop: rem(40)
     }
   },

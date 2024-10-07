@@ -1,8 +1,20 @@
+import _ from 'lodash';
+
 type PureStyle = Record<string, string | number>;
 type FnStyle = (...args) => PureStyle | undefined;
 type Style = Record<string, string | number | PureStyle | FnStyle> | FnStyle;
 type PureStyleSet = Record<string, PureStyle>;
 type NthSet = Record<string, FnStyle>;
+type CascadeStyleSet = Record<string, {
+  parent: string[];
+  style: PureStyle;
+}[]>;
+
+type CascadeFnStyleSet = Record<string, {
+  parent: string[];
+  styleFn: FnStyle;
+}[]>;
+
 export type StyleSet = Record<string, Style>;
 
 // 全局样式集合
@@ -11,8 +23,20 @@ const globalStyleSet: PureStyleSet = {};
 // 全局样式里的 FnStyle
 const globalStyleFnSet: Record<string, FnStyle> = {};
 
-const pickStyleSet = (sourceStyle: StyleSet, pureStyleSet: PureStyleSet, fnStyleSet: NthSet) => {
-  const categorize = (key: string, style: Style, pureStyle: PureStyle) => {
+// 全局样式里的 cascadeStyle
+const globalCascadeStyleSet: CascadeStyleSet= {};
+
+// 全局样式里的 cascadeFnStyle
+const globalCascadeFnStyle: CascadeFnStyleSet = {};
+
+const pickStyleSet = (
+  sourceStyle: StyleSet, // 源样式集
+  pureStyleSet: PureStyleSet, // 纯样式集
+  fnStyleSet: NthSet, // 函数类样式集
+  cascadeStyleSet: CascadeStyleSet, // 级联纯样式集
+  cascadeFnStyleSet: CascadeFnStyleSet,
+) => {
+  const categorize = (key: string, style: Style, pureStyle: PureStyle, parent: string[] = []) => {
     Object.entries(style).forEach(([styleKey, styleValue]) => {
       if (typeof styleValue === 'function') {
         /**
@@ -24,30 +48,19 @@ const pickStyleSet = (sourceStyle: StyleSet, pureStyleSet: PureStyleSet, fnStyle
           // 表示 :nth-child 伪类
           fnStyleSet[`${key}${styleKey.replace('&', '')}`] = styleValue;
         } else {
+          // 级联，子级样式
           fnStyleSet[`${key}${styleKey}`] = styleValue;
         }
-      } else if (
-        [
-          ':first-child',
-          ':last-child',
-          ':nth-child(odd)',
-          ':nth-child(even)',
-          ':before',
-          '::before',
-          ':after',
-          '::after',
-        ].includes(styleKey)
-      ) {
-        // 伪类 或 伪元素
-        pureStyleSet[`${key}${styleKey}`] = styleValue as PureStyle;
       } else if (styleKey.startsWith('&')) {
         // 支持父级选择器后，会存在多级嵌套
         const cssKey = `${key}${styleKey.replace('&', '')}`;
         const curPureStyle: PureStyle = {};
         categorize(cssKey, styleValue as Style, curPureStyle);
         pureStyleSet[cssKey] = curPureStyle;
-      }
-      else {
+      } else if (_.isObject(styleValue)) {
+        // 级联，子级样式
+
+      } else {
         pureStyle[styleKey] = styleValue as string;
       }
     });
@@ -69,7 +82,7 @@ const pickStyleSet = (sourceStyle: StyleSet, pureStyleSet: PureStyleSet, fnStyle
 export const setGlobalStyle = (styleSet: StyleSet) => {
   const pureStyleSet: PureStyleSet = {};
   // 提取出纯样式与nth函数
-  pickStyleSet(styleSet, globalStyleSet, globalStyleFnSet);
+  pickStyleSet(styleSet, globalStyleSet, globalStyleFnSet, globalCascadeStyleSet, globalCascadeFnStyle);
   Object.assign(globalStyleSet, pureStyleSet);
 };
 
@@ -77,7 +90,9 @@ export const setGlobalStyle = (styleSet: StyleSet) => {
 export function createCss(styleSet: StyleSet) {
   const pureStyleSet: PureStyleSet = {};
   const fnStyleSet: Record<string, FnStyle> = {};
-  pickStyleSet(styleSet, pureStyleSet, fnStyleSet);
+  const cascadeStyleSet: CascadeStyleSet = {};
+  const cascadeFnStyleSet: CascadeFnStyleSet = {};
+  pickStyleSet(styleSet, pureStyleSet, fnStyleSet, cascadeStyleSet, cascadeFnStyleSet);
   // 将 globalStyleSet 与 pureStyleSet 合并生成新的对象
   const mergeStyleSet: PureStyleSet = {};
   Object.entries(globalStyleSet).forEach(([key, value]) => {
@@ -100,7 +115,41 @@ export function createCss(styleSet: StyleSet) {
     }
   });
   const css = (...args) => {
-    if (!args.length) return Object.assign({}, mergeStyleSet, mergeFnStyleSet);
+    if (!args.length) {
+      return Object.assign({
+        $$getCascadeStyle$$(key: string, parentClassList: string[][]) {
+          const cascadeStyleList = cascadeStyleSet[key];
+          const cascadeFnStyleList = cascadeFnStyleSet[key];
+          // 没有级联，直接返回 null
+          if (!cascadeStyleList?.length && !cascadeFnStyleList?.length) return null;
+          const mergeCascadeStyle: PureStyle = {};
+          if (cascadeStyleList?.length) {
+            // 有内联样式
+            cascadeStyleList.forEach(({ parent, style }) => {
+              let startIndex = 0;
+              const isMatched = parent.every(item => parentClassList.every(classList => {
+                const len = classList.length;
+                for (let i = startIndex; i < len; ++i) {
+                  if (classList[i].includes(item)) {
+                    startIndex = i + 1; // 更新下一次的起始索引
+                    return true;
+                  }
+                }
+                return false;
+              }));
+              if (isMatched) {
+                // 表示找到级联样式了
+                Object.assign(mergeCascadeStyle, style);
+              }
+            });
+          }
+          if (cascadeFnStyleList?.length) {
+            // 有内联类样式
+            
+          }
+        },
+      }, mergeStyleSet, mergeFnStyleSet);
+    };
     const keys = args as string[]
     if (keys.length > 1) {
       const styles: PureStyle[] = keys.map(item => css(item));

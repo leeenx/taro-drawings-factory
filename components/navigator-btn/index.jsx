@@ -1,7 +1,8 @@
-import Taro from '@tarojs/taro'
-import { Component } from 'react'
-import { View } from '@tarojs/components'
-import css from './index.css'
+import Taro from '@tarojs/taro';
+import { Component } from 'react';
+import taroComponents from './index.css';
+
+const { View } = taroComponents;
 
 export default class NavigatorBtn extends Component {
   handleGoto (webPackage, page) {
@@ -17,11 +18,9 @@ export default class NavigatorBtn extends Component {
     return (
       <View
         className='demo-goto-btn'
-        style={css('demo-goto-btn')}
         onClick={this.handleGoto.bind(this, webPackage, page)}
       >
         查看详情
-        <View style={css('demo-goto-btn::after')}>→</View>
       </View>
     )
   }

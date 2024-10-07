@@ -9,14 +9,14 @@ export default createTaroComponentsBindCss({
   },
   'btn-item': {
     marginBottom: rem(20),
-    ':last-child': {
+    '&:last-child': {
       marginBottom: 0
     }
   },
   'subitem': {
     display: "inline-block",
     marginLeft: rem(24),
-    ':first-child': {
+    '&:first-child': {
       marginLeft: 0
     }
   }

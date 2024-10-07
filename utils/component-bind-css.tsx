@@ -19,7 +19,7 @@ const defaultPseudoComponentMapping: Record<string, string> = {
   MovableView: 'MovableView'
 };
 export default function <T>(css: Css, sourceGlobalComponents: T, pseudoComponentMapping = defaultPseudoComponentMapping) {
-  const textComponentName = pseudoComponentMapping.View;
+  const textComponentName = pseudoComponentMapping.Text;
   const Text = sourceGlobalComponents[textComponentName] as JSXElementConstructor<any>;
   const pseudoComponentNames = Object.values(pseudoComponentMapping);
   const globalComponents: T = {} as T;
@@ -32,9 +32,11 @@ export default function <T>(css: Css, sourceGlobalComponents: T, pseudoComponent
       style: rawStyle = {},
       nthChild,
       $$nthChildInfo$$,
+      $$parentClassList$$ = [],
       ...others
     } = props;
     const cssNames = className?.split(/\s+/);
+    const parentClassList: string[][] = [...$$parentClassList$$];
     const style = (() => {
       if (!className) return rawStyle;
       const nthChildInfo = nthChild || $$nthChildInfo$$;
@@ -44,6 +46,7 @@ export default function <T>(css: Css, sourceGlobalComponents: T, pseudoComponent
         const cssNameList: any[] = [];
         cssNames.forEach((cssName) => {
           cssNameList.push(cssName, [`${cssName}:nth-child`, currentIndex]);
+          cssNameList.push(`${cssName}:nth-child(${currentIndex + 1})`);
           if (isOdd) {
             cssNameList.push(`${cssName}:nth-child(odd)`);
           }
@@ -57,9 +60,17 @@ export default function <T>(css: Css, sourceGlobalComponents: T, pseudoComponent
             cssNameList.push(`${cssName}:last-child`);
           }
         });
-        return css(...cssNameList, rawStyle);
+        if (cssNameList.length) {
+          // 第一个是 nth-child 函数类
+          const nthChildFn = cssNameList.splice(1, 1);
+          parentClassList.push(cssNameList);
+          return css(nthChildFn, ...cssNameList, rawStyle);
+        }
+      } else if (cssNames.length) {
+        parentClassList.push(cssNames);
+        return css(...cssNames, rawStyle);
       }
-      return css(...cssNames, rawStyle);
+      return css(rawStyle);
     })();
     const beforeClassList: string[] = [];
     const afterClassList: string[] = [];
@@ -109,7 +120,8 @@ export default function <T>(css: Css, sourceGlobalComponents: T, pseudoComponent
               isEven,
               isFirst,
               isLast
-            }
+            },
+            $$parentClassList$$: parentClassList,
           });
           currentIndex += 1;
         }
@@ -126,7 +138,7 @@ export default function <T>(css: Css, sourceGlobalComponents: T, pseudoComponent
 
   // 生成没有伪类的组件
   const createComponentWithoutPseudo = (SourceComponent: JSXElementConstructor<any>) => (props: any) => {
-    const { $$nthChildInfo$$, className, style: rawStyle = {}, ...others } = props;
+    const { $$nthChildInfo$$, $$parentClassList$$ = [], className, style: rawStyle = {}, ...others } = props;
     const cssNames = className?.split(/\s+/);
     const style = className ? css(...cssNames, rawStyle) : rawStyle;
     // 微信小程序中，SourceComponent 是字符串，所以需要用 createElement 来实现

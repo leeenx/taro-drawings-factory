@@ -12,7 +12,7 @@ export default createTaroComponentsBindCss({
   },
   'subitem--badge': {
     marginLeft: rem(56),
-    ':first-child': {
+    '&:first-child': {
       marginLeft: 0,
     }
   },
