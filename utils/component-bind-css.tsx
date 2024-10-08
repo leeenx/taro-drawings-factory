@@ -1,5 +1,4 @@
-import { createElement, memo } from "react";
-import _ from 'lodash';
+import { createElement, memo, Fragment } from "react";
 import type { JSXElementConstructor } from "react";
 
 type Css = (...args) => any;
@@ -11,6 +10,7 @@ type Css = (...args) => any;
  * view、text、button、label、cover-view、movable-view
  */
 const defaultPseudoComponentMapping: Record<string, string> = {
+  Fragment: 'Fragment',
   View: 'View',
   Text: 'Text',
   Button: 'Button',
@@ -26,7 +26,7 @@ export default function <T>(css: Css, sourceGlobalComponents: T, containerCompon
   const textComponentName = containerComponentMapping.Text;
   const Text = sourceGlobalComponents[textComponentName] as JSXElementConstructor<any>;
   const pseudoComponentNames = Object.values(containerComponentMapping);
-  const globalComponents: T = {} as T;
+  const globalComponents = {} as T & { Fragment: typeof Fragment };
 
   // 返回所有的样式（包括函数）
   const styleSet = css();
@@ -139,7 +139,7 @@ export default function <T>(css: Css, sourceGlobalComponents: T, containerCompon
       const lastIndex = currentArrayLen - 1;
       let currentIndex = 0;
       childList.forEach(child => {
-        if (_.isObject(child.props)) {
+        if (child.props) {
           const isOdd = currentIndex % 2 === 0;
           const isEven = !isOdd;
           const isFirst = currentIndex === 0;
@@ -212,6 +212,9 @@ export default function <T>(css: Css, sourceGlobalComponents: T, containerCompon
       ...others
     });
   });
+
+  // fragment 容器
+  globalComponents['Fragment'] = createContainerComponent(Fragment);
 
   Object.keys(sourceGlobalComponents as Object).forEach((componentName) => {
     const key: string = componentName;

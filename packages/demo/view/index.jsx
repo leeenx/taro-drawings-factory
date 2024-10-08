@@ -20,7 +20,7 @@ import curtainPng from '~/assets/images/curtain.png';
 
 import taroComponents from './index.css';
 
-const { View, Image, Swiper, SwiperItem } = taroComponents;
+const { View, Image, Swiper, SwiperItem, Fragment } = taroComponents;
 
 export default memo(() => {
   const [state, updateState] = useState({
@@ -525,13 +525,15 @@ export default memo(() => {
                   indicatorDots
                   preMargin='20'
                 >
-                  {
-                    state.imgUrls.map((item, idx) => (
-                      <SwiperItem key={idx}>
-                        <Image mode='widthFix' src={item} className='slide-image' width='355' height='150' />
-                      </SwiperItem>
-                    ))
-                  }
+                  <Fragment>
+                    {
+                      state.imgUrls.map((item, idx) => (
+                        <SwiperItem key={idx} className='slide-item'>
+                          <Image mode='widthFix' src={item} className='slide-image' width='355' height='150' />
+                        </SwiperItem>
+                      ))
+                    }
+                  </Fragment>
                 </Swiper>
               </View>
             </View>

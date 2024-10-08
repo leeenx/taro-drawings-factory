@@ -18,5 +18,5 @@ export default createTaroComponentsBindCss({
   },
   'example-item--steps': {
     marginTop: rem(56)
-  }
+  },
 });

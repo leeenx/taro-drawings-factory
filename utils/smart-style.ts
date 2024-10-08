@@ -1,17 +1,20 @@
-import _ from 'lodash';
-
 type PureStyle = Record<string, string | number>;
 type FnStyle = (...args) => PureStyle | undefined;
-type Style = Record<string, string | number | PureStyle | FnStyle | Style> | FnStyle;
+interface StyleValue<T> {
+  [key: string]: T;
+}
+type Style = Record<string, string | number | PureStyle | FnStyle> | StyleValue<Style> | FnStyle;
 type PureStyleSet = Record<string, PureStyle>;
 type NthSet = Record<string, FnStyle>;
 type CascadeStyleItem = {
   parent: string[];
+  weight: number;
   style?: PureStyle;
 };
 type CascadeStyleSet = Record<string, CascadeStyleItem[]>;
 type CascadeFnStyleItem = {
   parent: string[];
+  weight: number;
   styleFn?: FnStyle;
 };
 type CascadeFnStyleSet = Record<string, CascadeFnStyleItem[]>;
@@ -30,6 +33,52 @@ const globalCascadeStyleSet: CascadeStyleSet= {};
 // 全局样式里的 cascadeFnStyle
 const globalCascadeFnStyle: CascadeFnStyleSet = {};
 
+// 按权重添加
+const addStyleItemByWeight = (
+  item: CascadeStyleItem,
+  cascadeFnStyleList: CascadeFnStyleItem[] | CascadeStyleItem[]
+) => {
+  const lastIndex = cascadeFnStyleList.length - 1;
+  for(let i = lastIndex; i >=  0; --i) {
+    const cascadeFnStyleItem = cascadeFnStyleList[i];
+    if (item.weight >= cascadeFnStyleItem.weight) {
+      // 插在当前位置后面
+      cascadeFnStyleList.splice(i + 1, 0, item);
+      break;
+    }
+  }
+};
+
+// 添加级联样式
+const addCascadeStyle = (
+  key: string,
+  item: CascadeStyleItem,
+  cascadeStyleSet: CascadeStyleSet, // 级联纯样式集
+) => {
+  if (!cascadeStyleSet[key]) {
+    cascadeStyleSet[key] = [item];
+  }
+  else {
+    const cascadeStyleList = cascadeStyleSet[key];
+    addStyleItemByWeight(item, cascadeStyleList);
+  }
+};
+
+// 添加函数类级联样式
+const addCascadeFnStyle = (
+  key: string,
+  item: CascadeFnStyleItem,
+  cascadeFnStyleSet: CascadeFnStyleSet, // 级联函数类样式集
+) => {
+  if (!cascadeFnStyleSet[key]) {
+    cascadeFnStyleSet[key] = [item];
+  }
+  else {
+    const cascadeFnStyleList = cascadeFnStyleSet[key];
+    addStyleItemByWeight(item, cascadeFnStyleList);
+  }
+};
+
 const pickStyleSet = (
   sourceStyle: StyleSet, // 源样式集
   pureStyleSet: PureStyleSet, // 纯样式集
@@ -37,16 +86,7 @@ const pickStyleSet = (
   cascadeStyleSet: CascadeStyleSet, // 级联纯样式集
   cascadeFnStyleSet: CascadeFnStyleSet, // 级联函数类样式集
 ) => {
-  // 添加级联样式
-  const addCascadeStyle = (key: string, item: CascadeStyleItem) => {
-    if (!cascadeStyleSet[key]) cascadeStyleSet[key] = [item];
-    else cascadeStyleSet[key].push(item);
-  };
-  // 添加函数类级联样式
-  const addCascadeFnStyle = (key: string, item: CascadeFnStyleItem) => {
-    if (!cascadeFnStyleSet[key]) cascadeFnStyleSet[key] = [item];
-    else cascadeFnStyleSet[key].push(item);
-  };
+  
   const categorize = (key: string, style: Style, pureStyle: PureStyle, parent: string[] = []) => {
     const nextParent = [...parent];
     const lastParentIndex = parent.length - 1;
@@ -67,15 +107,17 @@ const pickStyleSet = (
             nextParent.pop();
             addCascadeFnStyle(nthChildKey, {
               parent: nextParent,
+              weight: nextParent.length, // 权重就是父级的长度
               styleFn: styleValue as FnStyle
-            });
+            }, cascadeFnStyleSet);
           }
         } else {
           // 级联
           addCascadeFnStyle(styleKey, {
             parent: nextParent,
+            weight: nextParent.length, // 权重就是父级的长度
             styleFn: styleValue as FnStyle,
-          });
+          }, cascadeFnStyleSet);
         }
       } else if (styleKey.startsWith('&')) {
         // 支持父级选择器后，会存在多级嵌套
@@ -89,10 +131,11 @@ const pickStyleSet = (
           nextParent.pop();
           addCascadeStyle(cssKey, {
             parent: nextParent,
+            weight: nextParent.length, // 权重就是父级的长度
             style: curPureStyle,
-          });
+          }, cascadeStyleSet);
         }
-      } else if (_.isObject(styleValue)) {
+      } else if (typeof styleValue === 'object') {
         // 级联
         const curPureStyle: PureStyle = {};
         nextParent.push(styleKey);
@@ -100,8 +143,9 @@ const pickStyleSet = (
         nextParent.pop();
         addCascadeStyle(styleKey, {
           parent: nextParent,
+          weight: nextParent.length, // 权重就是父级的长度
           style: curPureStyle,
-        });
+        }, cascadeStyleSet);
       } else {
         pureStyle[styleKey] = styleValue as string;
       }
