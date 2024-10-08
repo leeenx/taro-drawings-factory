@@ -1,4 +1,4 @@
-import { createElement } from "react";
+import { createElement, memo } from "react";
 import _ from 'lodash';
 import type { JSXElementConstructor } from "react";
 
@@ -11,34 +11,55 @@ type Css = (...args) => any;
  * view、text、button、label、cover-view、movable-view
  */
 const defaultPseudoComponentMapping: Record<string, string> = {
-  View: 'View', 
-  Text: 'Text', 
-  Button: 'Button', 
-  Label: 'Label', 
-  CoverView: 'CoverView', 
-  MovableView: 'MovableView'
+  View: 'View',
+  Text: 'Text',
+  Button: 'Button',
+  Label: 'Label',
+  CoverView: 'CoverView',
+  MovableView: 'MovableView',
+  MovableArea: 'MovableArea',
+  Swiper: 'Swiper',
+  SwiperItem: 'SwiperItem',
+  MatchMedia: 'MatchMedia',
 };
-export default function <T>(css: Css, sourceGlobalComponents: T, pseudoComponentMapping = defaultPseudoComponentMapping) {
-  const textComponentName = pseudoComponentMapping.Text;
+export default function <T>(css: Css, sourceGlobalComponents: T, containerComponentMapping = defaultPseudoComponentMapping) {
+  const textComponentName = containerComponentMapping.Text;
   const Text = sourceGlobalComponents[textComponentName] as JSXElementConstructor<any>;
-  const pseudoComponentNames = Object.values(pseudoComponentMapping);
+  const pseudoComponentNames = Object.values(containerComponentMapping);
   const globalComponents: T = {} as T;
 
+  // 返回所有的样式（包括函数）
+  const styleSet = css();
+
+  // 缓存样式
+  const memoCascadeStyleSet: Record<string, any> = {};
+
+  const getMemoCascadeStyle = (memoId: string, createMemoStyle: () => any) => {
+    let memoStyle: any = memoCascadeStyleSet[memoId];
+    if (!memoStyle) {
+      memoStyle = memoCascadeStyleSet[memoId] = createMemoStyle();
+    }
+    return memoStyle;
+  };
+
   // 生成有伪类的组件
-  const createComponentWithPseudo = (SourceComponent: JSXElementConstructor<any>) => (props: any) => {
+  const createContainerComponent = (SourceComponent: JSXElementConstructor<any>) => memo((props: any) => {
     const {
       className,
       children,
       style: rawStyle = {},
       nthChild,
       $$nthChildInfo$$,
+      $$parentMemoId$$ = '',
       $$parentClassList$$ = [],
       ...others
     } = props;
     const cssNames = className?.split(/\s+/);
     const parentClassList: string[][] = [...$$parentClassList$$];
+    let memoId: string = `${className}#1`;
     const style = (() => {
       if (!className) return rawStyle;
+      let resultStyle: any = {};
       const nthChildInfo = nthChild || $$nthChildInfo$$;
       if (nthChildInfo) {
         const { isFirst, isLast, isOdd, isEven, currentIndex } = nthChildInfo;
@@ -61,21 +82,31 @@ export default function <T>(css: Css, sourceGlobalComponents: T, pseudoComponent
           }
         });
         if (cssNameList.length) {
-          // 第一个是 nth-child 函数类
-          const nthChildFn = cssNameList.splice(1, 1);
-          parentClassList.push(cssNameList);
-          return css(nthChildFn, ...cssNameList, rawStyle);
+          // 生成缓存 id
+          const currentNodeMemoId = `${className}#${currentIndex}`;
+          memoId = $$parentMemoId$$ ? `${$$parentMemoId$$}|${currentNodeMemoId}` : currentNodeMemoId;
+          resultStyle = getMemoCascadeStyle(memoId, () => {
+            const currentClassList = cssNameList.filter(item => !Array.isArray(item));
+            let cascadeStyleList: any[] = [];
+            currentClassList.forEach(className => {
+              const cascadeStyle = styleSet.$$getCascadeStyle$$(className, parentClassList, currentIndex);
+              if (cascadeStyle) {
+                cascadeStyleList.push(cascadeStyle);
+              }
+            });
+            parentClassList.push(currentClassList);
+            return css(...cssNameList, ...cascadeStyleList);
+          });
         }
       } else if (cssNames.length) {
+        // 根节点会进这个分支
         parentClassList.push(cssNames);
-        return css(...cssNames, rawStyle);
+        resultStyle = getMemoCascadeStyle(memoId, () => css(...cssNames));
       }
-      return css(rawStyle);
+      return  resultStyle ? Object.assign(resultStyle, rawStyle) : rawStyle;
     })();
     const beforeClassList: string[] = [];
     const afterClassList: string[] = [];
-    // 返回所有的样式（包括函数）
-    const styleSet = css();
     cssNames?.forEach(cssName => {
       const beforeClass = `${cssName}::before`;
       const afterClass = `${cssName}::after`;
@@ -102,11 +133,12 @@ export default function <T>(css: Css, sourceGlobalComponents: T, pseudoComponent
       const content = afterStyle.content;
       return <Text style={afterStyle} data-pseudo="::after">{content}</Text>;
     };
-    if (Array.isArray(children)) {
-      const currentArrayLen = children.length;
+    if (children) {
+      const childList = Array.isArray(children) ? children : [children];
+      const currentArrayLen = childList.length;
       const lastIndex = currentArrayLen - 1;
       let currentIndex = 0;
-      children.forEach(child => {
+      childList.forEach(child => {
         if (_.isObject(child.props)) {
           const isOdd = currentIndex % 2 === 0;
           const isEven = !isOdd;
@@ -122,6 +154,7 @@ export default function <T>(css: Css, sourceGlobalComponents: T, pseudoComponent
               isLast
             },
             $$parentClassList$$: parentClassList,
+            $$parentMemoId$$: memoId,
           });
           currentIndex += 1;
         }
@@ -134,28 +167,59 @@ export default function <T>(css: Css, sourceGlobalComponents: T, pseudoComponent
       nthChild,
       ...others
     }, [renderBefore(), children, renderAfter()]);
-  };
+  });
 
   // 生成没有伪类的组件
-  const createComponentWithoutPseudo = (SourceComponent: JSXElementConstructor<any>) => (props: any) => {
-    const { $$nthChildInfo$$, $$parentClassList$$ = [], className, style: rawStyle = {}, ...others } = props;
+  const createAtomComponent = (SourceComponent: JSXElementConstructor<any>) => memo((props: any) => {
+    const {
+      $$nthChildInfo$$,
+      nthChild,
+      $$parentClassList$$ = [],
+      $$parentMemoId$$ = '',
+      className,
+      style: rawStyle = {},
+      ...others
+    } = props;
     const cssNames = className?.split(/\s+/);
-    const style = className ? css(...cssNames, rawStyle) : rawStyle;
+    // const style = className ? css(...cssNames, rawStyle) : rawStyle;
+    const style = (() => {
+      if (!className) return rawStyle;
+      // 生成缓存 id
+      const nthChildInfo = nthChild || $$nthChildInfo$$;
+      const { currentIndex = 1 } = nthChildInfo;
+      const currentNodeMemoId = `${className}#${currentIndex}`;
+      const memoId = $$parentMemoId$$ ? `${$$parentMemoId$$}|${currentNodeMemoId}` : currentNodeMemoId;
+      const resultStyle: any = getMemoCascadeStyle(memoId, () => {
+        const parentClassList: string[][] = [...$$parentClassList$$];
+        const currentClassList = cssNames.filter(item => !Array.isArray(item));
+        let cascadeStyleList: any[] = [];
+        currentClassList.forEach(className => {
+          const cascadeStyle = styleSet.$$getCascadeStyle$$(className, parentClassList, currentIndex);
+          if (cascadeStyle) {
+            cascadeStyleList.push(cascadeStyle);
+          }
+        });
+        parentClassList.push(currentClassList);
+        return css(...cssNames, ...cascadeStyleList);
+      });
+      return Object.assign(resultStyle, rawStyle);
+    })();
     // 微信小程序中，SourceComponent 是字符串，所以需要用 createElement 来实现
     return createElement(SourceComponent, {
       className,
       style,
+      nthChild,
       ...others
     });
-  };
-  
+  });
+
   Object.keys(sourceGlobalComponents as Object).forEach((componentName) => {
     const key: string = componentName;
     const SourceComponent = sourceGlobalComponents[key] as JSXElementConstructor<any>;
     if (pseudoComponentNames.includes(key)) {
-      globalComponents[key] = createComponentWithPseudo(SourceComponent);
+      globalComponents[key] = createContainerComponent(SourceComponent);
     } else {
-      globalComponents[key] = createComponentWithoutPseudo(SourceComponent);
+      globalComponents[key] = createAtomComponent(SourceComponent);
     }
   });
 

@@ -9,10 +9,10 @@ const taroComponents = createTaroComponentsBindCss({
     color: "#FFF",
     fontSize: rem(28),
     textAlign: "center",
-    ':nth-child(odd)': {
+    '&:nth-child(odd)': {
       backgroundColor: "#5274A0",
     },
-    ':nth-child(even)': {
+    '&:nth-child(even)': {
       backgroundColor: "#7590b3",
     },
   },
